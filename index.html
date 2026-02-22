@@ -925,8 +925,7 @@
         </div>
     </div>
 
-    <script src="main-game.js"></script>
-<script>
+    <script>
 // ========== تنظیمات سرور ==========
 const JSONBIN_ID = '6984ae3a43b1c97be967c32b';
 const JSONBIN_KEY = '$2a$10$P2f/7ECPzq3HSI.6DSdcr.MaV748WQF7smMQL1bczP6YF4XKwjNvG';
@@ -935,6 +934,7 @@ const AUTH_PAGE_URL = 'https://admin161723.github.io/Mafia_Sun_10.1000/';
 
 // ========== آواتارها ==========
 const AVATARS = {
+    // آواتارهای پایه (رایگان)
     'avatar1': 'https://s8.uupload.ir/files/inshot_20260208_214035107_wkwk.png',
     'avatar2': 'https://s8.uupload.ir/files/inshot_20260208_214116629_6joe.png',
     'ninja': 'https://s8.uupload.ir/files/inshot_20260212_151231364_umrq.png',
@@ -948,7 +948,7 @@ const AVATARS = {
     'avatar11': 'https://s8.uupload.ir/files/inshot_20260216_031443956_hnie.png',
     'avatar12': 'https://s8.uupload.ir/files/inshot_20260216_031355260_y72k.png',
     
-    // آواتارهای فروشگاه (برای وقتی باز شد)
+    // آواتارهای فروشگاه (با قیمت جم)
     'new13': 'https://s8.uupload.ir/files/inshot_20260222_023037731_8cfr.png',
     'new14': 'https://s8.uupload.ir/files/inshot_20260222_023128005_w5f7.png',
     'new15': 'https://s8.uupload.ir/files/inshot_20260222_023210312_6bdu.png',
@@ -962,7 +962,18 @@ const AVATARS = {
     'creator2': 'https://s8.uupload.ir/files/inshot_20260222_024612597_9s3b.png'
 };
 
-// ========== آواتارهای جدید ==========
+// ========== آواتارهای فروشگاه ==========
+const SHOP_AVATARS = [
+    { id: 'new13', num: '#۰۲۱', price: 230, currency: 'gems' },
+    { id: 'new14', num: '#۰۲۲', price: 250, currency: 'gems' },
+    { id: 'new15', num: '#۰۲۳', price: 180, currency: 'gems' },
+    { id: 'new16', num: '#۰۲۴', price: 200, currency: 'gems' },
+    { id: 'new17', num: '#۰۲۵', price: 210, currency: 'gems' },
+    { id: 'new18', num: '#۰۲۶', price: 100, currency: 'gems' },
+    { id: 'new19', num: '#۰۲۷', price: 280, currency: 'gems' }
+];
+
+// ========== آواتارهای جدید (برای آواتارهای من) ==========
 const NEW_AVATARS = [
     { id: 'new1', url: 'https://s8.uupload.ir/files/inshot_20260219_185604498_kewe.png', price: 100, currency: 'gems', num: '#۰۱۳' },
     { id: 'new2', url: 'https://s8.uupload.ir/files/inshot_20260219_185527215_0xpa.png', price: 2000, currency: 'coins', num: '#۰۱۴' },
@@ -972,6 +983,114 @@ const NEW_AVATARS = [
     { id: 'new6', url: 'https://s8.uupload.ir/files/inshot_20260219_185247894_rkm.png', price: 200, currency: 'gems', num: '#۰۱۸' },
     { id: 'new7', url: 'https://s8.uupload.ir/files/inshot_20260219_185152210_d9m.png', price: 180, currency: 'gems', num: '#۰۱۹' },
     { id: 'new8', url: 'https://s8.uupload.ir/files/inshot_20260219_185049749_ecnw.png', price: 250, currency: 'gems', num: '#۰۲۰' }
+];
+
+// ========== کاربران ویژه ==========
+const SPECIAL_USERS = [
+    // سازنده بازی (کاربر 1) - تیک آبی - جم بی نهایت
+    {
+        phone: '09904844031',
+        userId: 1,
+        name: 'ᴀᴍᴏᴍɪᴛɪ',
+        gems: Infinity,
+        coins: Infinity,
+        password: 'Admin16172-matin-1000',
+        role: 'creator',
+        hasBlueTick: true,
+        hasOrangeTick: false,
+        hasBrownTick: false,
+        ownedAvatars: ['avatar1', 'avatar2', 'ninja', 'samurai', 'avatar5', 'avatar6', 'avatar7', 'avatar8', 'avatar9', 'avatar10', 'avatar11', 'avatar12', 'creator1', 'creator2']
+    },
+    
+    // پشتیبانی 1 (کاربر 3) - تیک آبی - جم 99999
+    {
+        phone: '09940940720',
+        userId: 3,
+        name: '♛✯ Èr£åñ_ʂɧ ✯♛',
+        gems: 99999,
+        coins: 99999,
+        password: 'Erfan.sh85',
+        role: 'support',
+        hasBlueTick: true,
+        hasOrangeTick: false,
+        hasBrownTick: false,
+        ownedAvatars: ['avatar1', 'avatar2', 'ninja', 'samurai', 'avatar5', 'avatar6', 'avatar7', 'avatar8']
+    },
+    
+    // پشتیبانی 2 (کاربر 2) - تیک آبی - جم 99999
+    {
+        phone: '09212327833',
+        userId: 2,
+        name: 'Programmer',
+        gems: 99999,
+        coins: 99999,
+        password: '010101010',
+        role: 'support',
+        hasBlueTick: true,
+        hasOrangeTick: false,
+        hasBrownTick: false,
+        ownedAvatars: ['avatar1', 'avatar2', 'ninja', 'samurai', 'avatar5', 'avatar6', 'avatar7', 'avatar8']
+    },
+    
+    // ناظر (کاربر 100) - تیک نارنجی
+    {
+        phone: '09053065179',
+        userId: 100,
+        name: '•°Ami®=dar©°•',
+        gems: 2000,
+        coins: 5000,
+        password: 'amirhosein1386',
+        role: 'observer',
+        hasBlueTick: false,
+        hasOrangeTick: true,
+        hasBrownTick: false,
+        ownedAvatars: ['avatar1', 'avatar2', 'ninja', 'samurai']
+    },
+    
+    // ادمین 1 - elijah021 (کاربر 89) - تیک قهوه‌ای
+    {
+        phone: '09051396023',
+        userId: 89,
+        name: 'elijah021',
+        gems: 500,
+        coins: 5000,
+        password: 'ARAZ1381',
+        role: 'admin',
+        hasBlueTick: false,
+        hasOrangeTick: false,
+        hasBrownTick: true,
+        ownedAvatars: ['avatar1', 'avatar2', 'ninja', 'samurai', 'avatar5', 'avatar6']
+    },
+    
+    // ادمین 2 - ʝᴀᴅᴜᴳᴀʀ (کاربر 80) - تیک قهوه‌ای
+    {
+        phone: '09392865423',
+        userId: 80,
+        name: 'ʝᴀᴅᴜᴳᴀʀ',
+        gems: 500,
+        coins: 5000,
+        password: 'mehdii137123',
+        role: 'admin',
+        hasBlueTick: false,
+        hasOrangeTick: false,
+        hasBrownTick: true,
+        ownedAvatars: ['avatar1', 'avatar2', 'ninja', 'samurai', 'avatar5', 'avatar6']
+    },
+    
+    // ادمین 3 - FARZAM (کاربر 81) - تیک قهوه‌ای
+    {
+        phone: '09305075756',
+        userId: 81,
+        name: 'FARZAM',
+        gems: 500,
+        coins: 5000,
+        password: '123456789',
+        role: 'admin',
+        hasBlueTick: false,
+        hasOrangeTick: false,
+        hasBrownTick: true,
+        ownedAvatars: ['avatar1', 'avatar2', 'ninja', 'samurai', 'avatar5', 'avatar6']
+    }
 ];
 
 // ========== تابع دریافت از سرور ==========
@@ -1231,8 +1350,21 @@ const App = {
         const gemDisplay = document.getElementById('gemDisplay');
         const coinDisplay = document.getElementById('coinDisplay');
 
-        if (gemDisplay) gemDisplay.textContent = this.userGems.toLocaleString('fa-IR');
-        if (coinDisplay) coinDisplay.textContent = this.userCoins.toLocaleString('fa-IR');
+        if (gemDisplay) {
+            if (this.userGems === Infinity) {
+                gemDisplay.textContent = '∞';
+            } else {
+                gemDisplay.textContent = this.userGems.toLocaleString('fa-IR');
+            }
+        }
+        
+        if (coinDisplay) {
+            if (this.userCoins === Infinity) {
+                coinDisplay.textContent = '∞';
+            } else {
+                coinDisplay.textContent = this.userCoins.toLocaleString('fa-IR');
+            }
+        }
     },
 
     // ========== به‌روزرسانی صفحه پروفایل ==========
@@ -1316,18 +1448,7 @@ const App = {
             { id: 'avatar12', num: '#۰۱۲', img: this.avatars.avatar12 }
         ];
 
-        // اضافه کردن آواتارهای فروشگاه اگر کاربر داشته باشد
-        const shopAvatars = [
-            { id: 'new13', num: '#۰۲۱', img: this.avatars.new13 },
-            { id: 'new14', num: '#۰۲۲', img: this.avatars.new14 },
-            { id: 'new15', num: '#۰۲۳', img: this.avatars.new15 },
-            { id: 'new16', num: '#۰۲۴', img: this.avatars.new16 },
-            { id: 'new17', num: '#۰۲۵', img: this.avatars.new17 },
-            { id: 'new18', num: '#۰۲۶', img: this.avatars.new18 },
-            { id: 'new19', num: '#۰۲۷', img: this.avatars.new19 }
-        ];
-
-        [...avatarsList, ...shopAvatars, ...NEW_AVATARS].forEach(avatar => {
+        [...avatarsList, ...NEW_AVATARS].forEach(avatar => {
             if (this.ownedAvatars.includes(avatar.id)) {
                 html += `
                     <div class="avatar-card ${this.currentAvatar === avatar.id ? 'selected' : ''}" onclick="app.selectAvatar('${avatar.id}')">
@@ -1339,7 +1460,7 @@ const App = {
             }
         });
 
-        // اضافه کردن آواتارهای انحصاری سازنده اگر کاربر سازنده باشد
+        // اضافه کردن آواتارهای انحصاری سازنده
         if (this.userId === 1) {
             const creatorAvatars = [
                 { id: 'creator1', num: '#۱۰۰', img: this.avatars.creator1 },
@@ -1362,29 +1483,61 @@ const App = {
         myAvatarsGrid.innerHTML = html || '<div style="color: white; text-align: center; padding: 40px;">شما آواتاری ندارید</div>';
     },
 
-    // ========== به‌روزرسانی فروشگاه آواتارها (بسته) ==========
+    // ========== به‌روزرسانی فروشگاه آواتارها ==========
     updateShopAvatars() {
         const shopGrid = document.getElementById('shopGrid');
         if (!shopGrid) return;
 
-        // نمایش پیام "به زودی" به جای آواتارها
-        shopGrid.innerHTML = `
-            <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
-                <div style="font-size: 80px; margin-bottom: 20px; color: #f9d77e;">🛒</div>
-                <div style="font-size: 32px; color: white; margin-bottom: 15px; font-weight: bold;">فروشگاه به زودی</div>
-                <div style="font-size: 18px; color: #8f9aa7; max-width: 400px; margin: 0 auto;">در حال آماده‌سازی محصولات جدید هستیم. به زودی با آواتارهای ویژه باز خواهیم گشت!</div>
-                <div style="margin-top: 30px; display: flex; justify-content: center; gap: 15px;">
-                    <span style="background: #2a8a5e; width: 12px; height: 12px; border-radius: 50%; animation: pulse 1.5s infinite;"></span>
-                    <span style="background: #2a8a5e; width: 12px; height: 12px; border-radius: 50%; animation: pulse 1.5s infinite 0.3s;"></span>
-                    <span style="background: #2a8a5e; width: 12px; height: 12px; border-radius: 50%; animation: pulse 1.5s infinite 0.6s;"></span>
-                </div>
-            </div>
-        `;
+        let html = '';
+
+        SHOP_AVATARS.forEach(avatar => {
+            if (!this.ownedAvatars.includes(avatar.id)) {
+                const priceIcon = avatar.currency === 'gems' ? '💎' : '🪙';
+                const priceText = avatar.price.toLocaleString('fa-IR');
+                html += `
+                    <div class="avatar-card">
+                        <div class="avatar-thumb"><img src="${this.avatars[avatar.id]}"></div>
+                        <div class="avatar-number">${avatar.num}</div>
+                        <div style="color: #f9d77e; margin-bottom: 10px;">${priceIcon} ${priceText}</div>
+                        <button class="select-button" onclick="app.buyAvatar('${avatar.id}', '${avatar.num}', ${avatar.price}, '${avatar.currency}')">خرید</button>
+                    </div>
+                `;
+            }
+        });
+
+        shopGrid.innerHTML = html || '<div style="color: white; text-align: center; padding: 40px;">همه آواتارها را دارید</div>';
     },
 
-    // ========== خرید آواتار (فعلا غیرفعال) ==========
+    // ========== خرید آواتار ==========
     buyAvatar(avatarId, avatarNumber, price, currency) {
-        this.showNotification('🛒 فروشگاه به زودی باز می‌شود');
+        // کاربران ویژه می‌تونن رایگان بخرن
+        if (this.hasBlueTick || this.hasOrangeTick || this.hasBrownTick) {
+            if (!this.ownedAvatars.includes(avatarId)) {
+                this.ownedAvatars.push(avatarId);
+                this.saveUserData();
+                this.updateMyAvatars();
+                this.updateShopAvatars();
+                this.showNotification(`✅ آواتار ${avatarNumber} به مجموعه شما اضافه شد`);
+            }
+            return;
+        }
+
+        // بررسی جم کافی
+        if (this.userGems < price) {
+            alert('جم کافی ندارید');
+            return;
+        }
+
+        // کم کردن جم
+        this.userGems -= price;
+
+        // اضافه کردن آواتار
+        this.ownedAvatars.push(avatarId);
+        this.saveUserData();
+        this.updateCurrencyDisplay();
+        this.updateMyAvatars();
+        this.updateShopAvatars();
+        this.showNotification(`✅ آواتار ${avatarNumber} خریداری شد`);
     },
 
     // ========== انتخاب آواتار ==========
@@ -1413,9 +1566,6 @@ const App = {
 
     openShop() {
         this.showNotification('🛒 فروشگاه به زودی باز می‌شود');
-        // اگر خواستی صفحه آواتار باز بشه با تب فروشگاه:
-        // this.switchAvatarTab('shop');
-        // this.openAvatarPage();
     },
 
     // ========== باز کردن صفحه پروفایل ==========
