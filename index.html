@@ -927,7 +927,7 @@
 
     <script src="main-game.js"></script>
 <script>
- // ========== تنظیمات سرور ==========
+// ========== تنظیمات سرور ==========
 const JSONBIN_ID = '6984ae3a43b1c97be967c32b';
 const JSONBIN_KEY = '$2a$10$P2f/7ECPzq3HSI.6DSdcr.MaV748WQF7smMQL1bczP6YF4XKwjNvG';
 const FRIENDLY_HALL_URL = 'https://admin161723.github.io/Mafia_10000.189.0/';
@@ -948,7 +948,7 @@ const AVATARS = {
     'avatar11': 'https://s8.uupload.ir/files/inshot_20260216_031443956_hnie.png',
     'avatar12': 'https://s8.uupload.ir/files/inshot_20260216_031355260_y72k.png',
     
-    // آواتارهای فروشگاه
+    // آواتارهای فروشگاه (برای وقتی باز شد)
     'new13': 'https://s8.uupload.ir/files/inshot_20260222_023037731_8cfr.png',
     'new14': 'https://s8.uupload.ir/files/inshot_20260222_023128005_w5f7.png',
     'new15': 'https://s8.uupload.ir/files/inshot_20260222_023210312_6bdu.png',
@@ -1316,7 +1316,18 @@ const App = {
             { id: 'avatar12', num: '#۰۱۲', img: this.avatars.avatar12 }
         ];
 
-        [...avatarsList, ...NEW_AVATARS].forEach(avatar => {
+        // اضافه کردن آواتارهای فروشگاه اگر کاربر داشته باشد
+        const shopAvatars = [
+            { id: 'new13', num: '#۰۲۱', img: this.avatars.new13 },
+            { id: 'new14', num: '#۰۲۲', img: this.avatars.new14 },
+            { id: 'new15', num: '#۰۲۳', img: this.avatars.new15 },
+            { id: 'new16', num: '#۰۲۴', img: this.avatars.new16 },
+            { id: 'new17', num: '#۰۲۵', img: this.avatars.new17 },
+            { id: 'new18', num: '#۰۲۶', img: this.avatars.new18 },
+            { id: 'new19', num: '#۰۲۷', img: this.avatars.new19 }
+        ];
+
+        [...avatarsList, ...shopAvatars, ...NEW_AVATARS].forEach(avatar => {
             if (this.ownedAvatars.includes(avatar.id)) {
                 html += `
                     <div class="avatar-card ${this.currentAvatar === avatar.id ? 'selected' : ''}" onclick="app.selectAvatar('${avatar.id}')">
@@ -1328,89 +1339,52 @@ const App = {
             }
         });
 
+        // اضافه کردن آواتارهای انحصاری سازنده اگر کاربر سازنده باشد
+        if (this.userId === 1) {
+            const creatorAvatars = [
+                { id: 'creator1', num: '#۱۰۰', img: this.avatars.creator1 },
+                { id: 'creator2', num: '#۱۰۱', img: this.avatars.creator2 }
+            ];
+            
+            creatorAvatars.forEach(avatar => {
+                if (this.ownedAvatars.includes(avatar.id)) {
+                    html += `
+                        <div class="avatar-card ${this.currentAvatar === avatar.id ? 'selected' : ''}" onclick="app.selectAvatar('${avatar.id}')">
+                            <div class="avatar-thumb"><img src="${avatar.img}"></div>
+                            <div class="avatar-number">${avatar.num}</div>
+                            <button class="select-button" onclick="app.selectAvatar('${avatar.id}'); event.stopPropagation();">انتخاب</button>
+                        </div>
+                    `;
+                }
+            });
+        }
+
         myAvatarsGrid.innerHTML = html || '<div style="color: white; text-align: center; padding: 40px;">شما آواتاری ندارید</div>';
     },
 
-    // ========== به‌روزرسانی فروشگاه آواتارها ==========
+    // ========== به‌روزرسانی فروشگاه آواتارها (بسته) ==========
     updateShopAvatars() {
         const shopGrid = document.getElementById('shopGrid');
         if (!shopGrid) return;
 
-        const shopAvatars = [
-            { id: 'ninja', num: '#۰۰۳', img: this.avatars.ninja, price: 200, currency: 'gems' },
-            { id: 'samurai', num: '#۰۰۴', img: this.avatars.samurai, price: 200, currency: 'gems' },
-            { id: 'avatar5', num: '#۰۰۵', img: this.avatars.avatar5, price: 180, currency: 'gems' },
-            { id: 'avatar6', num: '#۰۰۶', img: this.avatars.avatar6, price: 100, currency: 'gems' },
-            { id: 'avatar7', num: '#۰۰۷', img: this.avatars.avatar7, price: 2000, currency: 'coins' },
-            { id: 'avatar8', num: '#۰۰۸', img: this.avatars.avatar8, price: 1200, currency: 'coins' },
-            { id: 'avatar9', num: '#۰۰۹', img: this.avatars.avatar9, price: 300, currency: 'gems' },
-            { id: 'avatar10', num: '#۰۱۰', img: this.avatars.avatar10, price: 300, currency: 'gems' },
-            { id: 'avatar11', num: '#۰۱۱', img: this.avatars.avatar11, price: 300, currency: 'gems' },
-            { id: 'avatar12', num: '#۰۱۲', img: this.avatars.avatar12, price: 50, currency: 'gems' }
-        ];
-
-        NEW_AVATARS.forEach(avatar => {
-            if (!shopAvatars.some(a => a.id === avatar.id)) {
-                shopAvatars.push({
-                    id: avatar.id,
-                    num: avatar.num,
-                    img: avatar.url,
-                    price: avatar.price,
-                    currency: avatar.currency
-                });
-            }
-        });
-
-        let html = '';
-        shopAvatars.forEach(avatar => {
-            if (!this.ownedAvatars.includes(avatar.id)) {
-                const priceIcon = avatar.currency === 'gems' ? '💎' : '🪙';
-                const priceText = avatar.price.toLocaleString('fa-IR');
-                html += `
-                    <div class="avatar-card">
-                        <div class="avatar-thumb"><img src="${avatar.img}"></div>
-                        <div class="avatar-number">${avatar.num}</div>
-                        <div style="color: #f9d77e; margin-bottom: 10px;">${priceIcon} ${priceText}</div>
-                        <button class="select-button" onclick="app.buyAvatar('${avatar.id}', '${avatar.num}', ${avatar.price}, '${avatar.currency}')">خرید</button>
-                    </div>
-                `;
-            }
-        });
-
-        shopGrid.innerHTML = html || '<div style="color: white; text-align: center; padding: 40px;">همه آواتارها را دارید</div>';
+        // نمایش پیام "به زودی" به جای آواتارها
+        shopGrid.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
+                <div style="font-size: 80px; margin-bottom: 20px; color: #f9d77e;">🛒</div>
+                <div style="font-size: 32px; color: white; margin-bottom: 15px; font-weight: bold;">فروشگاه به زودی</div>
+                <div style="font-size: 18px; color: #8f9aa7; max-width: 400px; margin: 0 auto;">در حال آماده‌سازی محصولات جدید هستیم. به زودی با آواتارهای ویژه باز خواهیم گشت!</div>
+                <div style="margin-top: 30px; display: flex; justify-content: center; gap: 15px;">
+                    <span style="background: #2a8a5e; width: 12px; height: 12px; border-radius: 50%; animation: pulse 1.5s infinite;"></span>
+                    <span style="background: #2a8a5e; width: 12px; height: 12px; border-radius: 50%; animation: pulse 1.5s infinite 0.3s;"></span>
+                    <span style="background: #2a8a5e; width: 12px; height: 12px; border-radius: 50%; animation: pulse 1.5s infinite 0.6s;"></span>
+                </div>
+            </div>
+        `;
     },
 
-    // ========== خرید آواتار ==========
+    // ========== خرید آواتار (فعلا غیرفعال) ==========
     buyAvatar(avatarId, avatarNumber, price, currency) {
-        if (this.hasBlueTick || this.hasOrangeTick || this.hasBrownTick) {
-            if (!this.ownedAvatars.includes(avatarId)) {
-                this.ownedAvatars.push(avatarId);
-                this.saveUserData();
-                this.updateMyAvatars();
-                this.updateShopAvatars();
-                this.showNotification(`✅ آواتار ${avatarNumber} به مجموعه شما اضافه شد`);
-            }
-            return;
-        }
-
-        if (currency === 'gems' && this.userGems < price) {
-            alert('جم کافی ندارید');
-            return;
-        }
-        if (currency === 'coins' && this.userCoins < price) {
-            alert('سکه کافی ندارید');
-            return;
-        }
-
-        if (currency === 'gems') this.userGems -= price;
-        else this.userCoins -= price;
-
-        this.ownedAvatars.push(avatarId);
-        this.saveUserData();
-        this.updateCurrencyDisplay();
-        this.updateMyAvatars();
-        this.updateShopAvatars();
-        this.showNotification(`✅ آواتار ${avatarNumber} خریداری شد`);
+        this.showNotification('🛒 فروشگاه به زودی باز می‌شود');
     },
 
     // ========== انتخاب آواتار ==========
@@ -1438,8 +1412,10 @@ const App = {
     },
 
     openShop() {
-        this.switchAvatarTab('shop');
-        this.openAvatarPage();
+        this.showNotification('🛒 فروشگاه به زودی باز می‌شود');
+        // اگر خواستی صفحه آواتار باز بشه با تب فروشگاه:
+        // this.switchAvatarTab('shop');
+        // this.openAvatarPage();
     },
 
     // ========== باز کردن صفحه پروفایل ==========
