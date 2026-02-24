@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>مافیا سان | صفحه اصلی</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', 'Inter', sans-serif;
+            overflow: hidden;
+            background: #0a0c10;
+        }
+
+        /* صفحه اصلی بازی - پس زمینه تمام صفحه */
+        #main-game-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://s8.uupload.ir/files/file_00000000ce4071fd96295e0893579ed1_9q9n.png') no-repeat center center fixed;
+            background-size: cover;
+            display: block;
+        }
+
+        /* صفحه پروفایل */
+        #profile-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://s8.uupload.ir/files/img_20260212_001408_558_g4g9.jpg') no-repeat center center;
+            background-size: cover;
+            display: none;
+            overflow-y: auto;
+            z-index: 2000;
+        }
+
+        /* صفحه آواتار */
+        #avatar-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://s8.uupload.ir/files/img_20260212_001408_558_g4g9.jpg') no-repeat center center;
+            background-size: cover;
+            display: none;
+            overflow-y: auto;
+            z-index: 3000;
+        }
+
+        /* ========== هدر ========== */
+        .game-header {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 1001;
+        }
+
+        .currency-card {
+            background: rgba(20, 25, 35, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 25px;
+            padding: 6px 15px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #3a4050;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .currency-icon {
+            font-size: 16px;
+        }
+
+        .gem-icon { color: #6eacda; }
+        .coin-icon { color: #f9d77e; }
+
+        .currency-info {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .currency-label {
+            color: #8f9aa7;
+            font-size: 11px;
+        }
+
+        .currency-value {
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* ========== پروفایل ========== */
+        .profile-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(20, 25, 35, 0.85);
+            backdrop-filter: blur(8px);
+            padding: 8px 18px;
+            border-radius: 40px;
+            border: 1px solid #3a4050;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .profile-container:hover {
+            border-color: #6eacda;
+            transform: translateY(-2px);
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid #6eacda;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-name {
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .profile-level {
+            color: #8f9aa7;
+            font-size: 11px;
+        }
+
+        /* ========== دکمه‌های اصلی بازی ========== */
+        .game-buttons {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 50px;
+            z-index: 500;
+        }
+
+        .game-btn {
+            width: 150px;
+            height: 150px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+        }
+
+        .game-btn:hover {
+            transform: translateY(-10px) scale(1.05);
+            filter: drop-shadow(0 15px 30px rgba(110, 172, 218, 0.3));
+        }
+
+        .game-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* ========== نوار باریک شیشه‌ای ========== */
+        .glass-bar {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 340px;
+            height: 65px;
+            background: rgba(25, 30, 40, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 35px;
+            z-index: 2000;
+        }
+
+        .glass-item {
+            width: 48px;
+            height: 48px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            opacity: 0.9;
+        }
+
+        .glass-item:hover {
+            transform: translateY(-5px);
+            opacity: 1;
+        }
+
+        .glass-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+        }
+
+        /* ========== پروفایل ========== */
+        .profile-back-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            background: rgba(20, 25, 35, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 1px solid #3a4050;
+            color: white;
+            font-size: 24px;
+            z-index: 2000;
+            transition: all 0.3s;
+        }
+
+        .profile-back-btn::after {
+            content: "←";
+        }
+
+        .profile-back-btn:hover {
+            border-color: #6eacda;
+            transform: rotate(180deg);
+        }
+
+        .profile-content {
+            max-width: 600px;
+            margin: 80px auto 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 0 20px 30px;
+        }
+
+        .profile-card {
+            background: rgba(20, 25, 35, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            border: 1px solid #3a4050;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .avatar-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid #6eacda;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .avatar-circle:hover {
+            transform: scale(1.05);
+            border-color: #f9d77e;
+        }
+
+        .avatar-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .name-box {
+            background: rgba(0,0,0,0.3);
+            border-radius: 40px;
+            padding: 12px 25px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #3a4050;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .name-box:hover {
+            border-color: #6eacda;
+        }
+
+        .user-name {
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .level-badge {
+            background: #6eacda;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .edit-status {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+            margin-top: 10px;
+            padding-top: 15px;
+            border-top: 1px solid #3a4050;
+        }
+
+        .free-badge, .coin-badge {
+            background: rgba(0,0,0,0.3);
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 12px;
+            color: #8f9aa7;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stats-section {
+            background: rgba(20, 25, 35, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 25px;
+            border: 1px solid #3a4050;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .user-id-block {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #3a4050;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-id-block:hover {
+            border-color: #6eacda;
+        }
+
+        .user-id-label {
+            color: #8f9aa7;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-id-value {
+            color: #6eacda;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 5px 15px;
+            border-radius: 30px;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .stat-cell {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #3a4050;
+            transition: all 0.3s;
+        }
+
+        .stat-cell:hover {
+            border-color: #6eacda;
+        }
+
+        .stat-icon {
+            font-size: 24px;
+            min-width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            color: #6eacda;
+        }
+
+        .stat-detail {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-label {
+            color: #8f9aa7;
+            font-size: 11px;
+        }
+
+        .stat-figure {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .rank-section {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #3a4050;
+            margin-top: 15px;
+        }
+
+        .rank-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .rank-icon {
+            font-size: 24px;
+            background: rgba(0,0,0,0.3);
+            padding: 8px;
+            border-radius: 10px;
+            color: #f9d77e;
+        }
+
+        .rank-label {
+            color: #8f9aa7;
+            font-size: 11px;
+        }
+
+        .rank-name {
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .rank-tag {
+            background: #6eacda;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 12px;
+        }
+
+        /* ========== صفحه آواتار ========== */
+        .avatar-container {
+            max-width: 800px;
+            margin: 80px auto 0;
+            padding: 0 20px 30px;
+        }
+
+        .avatar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .avatar-header h2 {
+            color: white;
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        .avatar-close-btn {
+            width: 45px;
+            height: 45px;
+            background: rgba(20, 25, 35, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 1px solid #3a4050;
+            color: white;
+            font-size: 22px;
+            transition: all 0.3s;
+        }
+
+        .avatar-close-btn::after {
+            content: "←";
+        }
+
+        .avatar-close-btn:hover {
+            border-color: #ff6b6b;
+            transform: rotate(90deg);
+        }
+
+        .avatar-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: rgba(20, 25, 35, 0.85);
+            backdrop-filter: blur(8px);
+            padding: 5px;
+            border-radius: 40px;
+            border: 1px solid #3a4050;
+            width: fit-content;
+        }
+
+        .avatar-tab {
+            padding: 10px 25px;
+            color: #8f9aa7;
+            font-size: 14px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .avatar-tab.active {
+            background: #6eacda;
+            color: white;
+        }
+
+        .tab-panel {
+            display: none;
+            background: rgba(20, 25, 35, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 30px;
+            padding: 30px;
+            border: 1px solid #3a4050;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .avatar-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            padding: 20px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid #3a4050;
+        }
+
+        .avatar-card:hover {
+            transform: translateY(-5px);
+            border-color: #6eacda;
+            box-shadow: 0 10px 20px rgba(110, 172, 218, 0.2);
+        }
+
+        .avatar-card.selected {
+            border-color: #f9d77e;
+            background: rgba(249, 215, 126, 0.1);
+        }
+
+        .avatar-thumb {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid #6eacda;
+            margin: 0 auto 10px;
+        }
+
+        .avatar-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-number {
+            color: #8f9aa7;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .select-button {
+            background: #2a8a5e;
+            color: white;
+            border: none;
+            padding: 6px 20px;
+            border-radius: 30px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .select-button:hover {
+            background: #1e6a4a;
+            transform: scale(1.05);
+        }
+
+        /* ========== مودال ویرایش نام ========== */
+        .edit-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(20, 25, 35, 0.98);
+            backdrop-filter: blur(20px);
+            border: 1px solid #6eacda;
+            border-radius: 30px;
+            padding: 30px;
+            width: 90%;
+            max-width: 350px;
+            display: none;
+            z-index: 10000;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+        }
+
+        .edit-modal h3 {
+            color: white;
+            font-size: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .coin-message {
+            color: #f9d77e;
+            font-size: 13px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(0,0,0,0.3);
+            padding: 8px;
+            border-radius: 30px;
+        }
+
+        .edit-input {
+            width: 100%;
+            padding: 12px 18px;
+            border-radius: 30px;
+            border: 1px solid #3a4050;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            font-size: 14px;
+            margin-bottom: 20px;
+            direction: rtl;
+        }
+
+        .edit-input:focus {
+            outline: none;
+            border-color: #6eacda;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .save-action {
+            flex: 2;
+            background: #2a8a5e;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 30px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .save-action:hover {
+            background: #1e6a4a;
+        }
+
+        .cancel-action {
+            flex: 1;
+            background: transparent;
+            color: white;
+            border: 1px solid #3a4050;
+            padding: 12px;
+            border-radius: 30px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cancel-action:hover {
+            border-color: #ff6b6b;
+        }
+
+        /* ========== نوتیفیکیشن ========== */
+        .copy-notification {
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2a8a5e;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 40px;
+            font-size: 14px;
+            z-index: 3000;
+            display: none;
+            animation: slideUp 1.5s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        @keyframes slideUp {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            85% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+        }
+
+        @media (max-width: 600px) {
+            .game-buttons {
+                gap: 30px;
+                bottom: 80px;
+            }
+            .game-btn {
+                width: 120px;
+                height: 120px;
+            }
+            .glass-bar {
+                width: 280px;
+                height: 55px;
+                gap: 25px;
+            }
+            .glass-item {
+                width: 40px;
+                height: 40px;
+            }
+            .avatar-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="main-game-page">
+        <div class="game-header">
+            <div class="currency-card">
+                <span class="currency-icon gem-icon">💎</span>
+                <div class="currency-info">
+                    <span class="currency-label">جواهر</span>
+                    <span class="currency-value" id="gemDisplay">100</span>
+                </div>
+            </div>
+            <div class="currency-card">
+                <span class="currency-icon coin-icon">🪙</span>
+                <div class="currency-info">
+                    <span class="currency-label">سکه</span>
+                    <span class="currency-value" id="coinDisplay">600</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-container" onclick="app.openProfilePage()">
+            <div class="profile-avatar" id="mainProfileAvatar">
+                <img src="https://s8.uupload.ir/files/inshot_20260208_214035107_wkwk.png">
+            </div>
+            <div class="profile-info">
+                <div class="profile-name" id="mainProfileName">بازیکن</div>
+                <div class="profile-level" id="mainProfileLevel">سطح ۱</div>
+            </div>
+        </div>
+
+        <!-- دکمه‌های اصلی بازی -->
+        <div class="game-buttons">
+            <div class="game-btn" onclick="app.openCompetitive()">
+                <img src="https://s8.uupload.ir/files/inshot_20260224_020256460_81p3.png" alt="رقابتی">
+            </div>
+            <div class="game-btn" onclick="app.openFriendlyHall()">
+                <img src="https://s8.uupload.ir/files/inshot_20260224_020314922_6mks.png" alt="سرورها">
+            </div>
+        </div>
+
+        <!-- نوار باریک شیشه‌ای پایین -->
+        <div class="glass-bar">
+            <div class="glass-item" onclick="app.openCup()">
+                <img src="https://s8.uupload.ir/files/inshot_20260221_223221592_qet.png" alt="کاپ">
+            </div>
+            <div class="glass-item" onclick="app.openClan()">
+                <img src="https://s8.uupload.ir/files/inshot_20260221_223016526_swue.png" alt="کلن">
+            </div>
+            <div class="glass-item" onclick="app.openShop()">
+                <img src="https://s8.uupload.ir/files/inshot_20260221_223333561_n7g4.png" alt="فروشگاه">
+            </div>
+        </div>
+
+        <div id="copyNotification" class="copy-notification">✅ کپی شد</div>
+    </div>
+
+    <!-- صفحه پروفایل -->
+    <div id="profile-page">
+        <div class="profile-back-btn" onclick="app.closeProfilePage()"></div>
+        <div class="profile-content">
+            <div class="profile-card">
+                <div class="avatar-circle" id="profileAvatarCircle" onclick="app.openAvatarPage()">
+                    <img id="profileAvatarImg" src="https://s8.uupload.ir/files/inshot_20260208_214035107_wkwk.png">
+                </div>
+                <div class="name-box" onclick="app.openEditModal()">
+                    <div class="user-name" id="profileUserName">بازیکن</div>
+                    <span class="level-badge" id="profileLevelBadge">سطح ۱</span>
+                </div>
+                <div class="edit-status">
+                    <span class="free-badge">⚡ ۱ بار رایگان</span>
+                    <span class="coin-badge"><span>🪙</span>۵ سکه</span>
+                </div>
+            </div>
+            <div class="stats-section">
+                <div class="user-id-block" onclick="app.copyUserId()">
+                    <span class="user-id-label"><span>🆔</span> کد کاربری</span>
+                    <span class="user-id-value" id="userIdDisplay">۱۲۳۴۵۶</span>
+                </div>
+                <div class="stats-row">
+                    <div class="stat-cell">
+                        <span class="stat-icon">🏆</span>
+                        <div class="stat-detail">
+                            <span class="stat-label">برد</span>
+                            <span class="stat-figure" id="winCount">۰</span>
+                        </div>
+                    </div>
+                    <div class="stat-cell">
+                        <span class="stat-icon">📊</span>
+                        <div class="stat-detail">
+                            <span class="stat-label">باخت</span>
+                            <span class="stat-figure" id="loseCount">۰</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="stats-row">
+                    <div class="stat-cell">
+                        <span class="stat-icon">⏳</span>
+                        <div class="stat-detail">
+                            <span class="stat-label">ساعت بازی</span>
+                            <span class="stat-figure" id="hoursPlayed">۰</span>
+                        </div>
+                    </div>
+                    <div class="stat-cell">
+                        <span class="stat-icon">👁️</span>
+                        <div class="stat-detail">
+                            <span class="stat-label">ناظر</span>
+                            <span class="stat-figure" id="observerCount">۰</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="rank-section">
+                    <div class="rank-info">
+                        <span class="rank-icon">👑</span>
+                        <div class="rank-detail">
+                            <span class="rank-label">مقام</span>
+                            <span class="rank-name" id="rankName">تازه‌وارد</span>
+                        </div>
+                    </div>
+                    <span class="rank-tag" id="rankTag">برنزی</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- صفحه آواتار -->
+    <div id="avatar-page">
+        <div class="avatar-container">
+            <div class="avatar-header">
+                <h2>انتخاب آواتار</h2>
+                <div class="avatar-close-btn" onclick="app.closeAvatarPage()"></div>
+            </div>
+            <div class="avatar-tabs">
+                <div class="avatar-tab active" onclick="app.switchAvatarTab('my')">آواتارهای من</div>
+                <div class="avatar-tab" onclick="app.switchAvatarTab('shop')">فروشگاه</div>
+            </div>
+            <div class="tab-panel active" id="myAvatarsPanel">
+                <div class="avatar-grid" id="myAvatarsGrid"></div>
+            </div>
+            <div class="tab-panel" id="shopPanel">
+                <div class="avatar-grid" id="shopGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- مودال ویرایش نام -->
+    <div class="edit-modal" id="editModal">
+        <h3 id="modalTitle">تغییر نام</h3>
+        <div id="coinRequiredMessage" class="coin-message" style="display: none;"><span>🪙</span> ۵ سکه نیاز است</div>
+        <input type="text" class="edit-input" id="editNameInput" maxlength="12" placeholder="نام جدید">
+        <div class="modal-actions">
+            <button class="save-action" onclick="app.saveUserName()">ذخیره</button>
+            <button class="cancel-action" onclick="app.closeEditModal()">انصراف</button>
+        </div>
+    </div>
+
+    <script src="main-game.js"></script>
+<script>
+// ========== لینک تالار دوستانه ==========
+const FRIENDLY_HALL_URL = 'https://admin161723.github.io/Mafia_10000.189.0/';
+
+// ========== آواتارها ==========
+const AVATARS = {
+    'avatar1': 'https://s8.uupload.ir/files/inshot_20260208_214035107_wkwk.png',
+    'avatar2': 'https://s8.uupload.ir/files/inshot_20260208_214116629_6joe.png',
+    'ninja': 'https://s8.uupload.ir/files/inshot_20260212_151231364_umrq.png',
+    'samurai': 'https://s8.uupload.ir/files/inshot_20260212_151120584_7df6.png',
+    'avatar5': 'https://s8.uupload.ir/files/inshot_20260213_195059047_ln6h.png',
+    'avatar6': 'https://s8.uupload.ir/files/inshot_20260213_195217329_u6to.png',
+    'avatar7': 'https://s8.uupload.ir/files/inshot_20260213_093421818_xwo9.png',
+    'avatar8': 'https://s8.uupload.ir/files/inshot_20260213_093508335_djbv.png',
+    'avatar9': 'https://s8.uupload.ir/files/inshot_20260217_183611271_wt7s.png',
+    'avatar10': 'https://s8.uupload.ir/files/inshot_20260216_031531507_0k5x.png',
+    'avatar11': 'https://s8.uupload.ir/files/inshot_20260216_031443956_hnie.png',
+    'avatar12': 'https://s8.uupload.ir/files/inshot_20260216_031355260_y72k.png'
+};
+
+// ========== آواتارهای جدید ==========
+const NEW_AVATARS = [
+    { id: 'new1', url: 'https://s8.uupload.ir/files/inshot_20260219_185604498_kewe.png', price: 100, currency: 'gems', num: '#۰۱۳' },
+    { id: 'new2', url: 'https://s8.uupload.ir/files/inshot_20260219_185527215_0xpa.png', price: 2000, currency: 'coins', num: '#۰۱۴' },
+    { id: 'new3', url: 'https://s8.uupload.ir/files/inshot_20260219_185448062_t1ky.png', price: 250, currency: 'gems', num: '#۰۱۵' },
+    { id: 'new4', url: 'https://s8.uupload.ir/files/inshot_20260219_185413696_avz3.png', price: 300, currency: 'gems', num: '#۰۱۶' },
+    { id: 'new5', url: 'https://s8.uupload.ir/files/inshot_20260219_185328676_pfs6.png', price: 10000, currency: 'coins', num: '#۰۱۷' },
+    { id: 'new6', url: 'https://s8.uupload.ir/files/inshot_20260219_185247894_rkm.png', price: 200, currency: 'gems', num: '#۰۱۸' },
+    { id: 'new7', url: 'https://s8.uupload.ir/files/inshot_20260219_185152210_d9m.png', price: 180, currency: 'gems', num: '#۰۱۹' },
+    { id: 'new8', url: 'https://s8.uupload.ir/files/inshot_20260219_185049749_ecnw.png', price: 250, currency: 'gems', num: '#۰۲۰' }
+];
+
+// ========== شیء اصلی برنامه ==========
+const App = {
+    currentAvatar: 'avatar1',
+    userName: 'بازیکن',
+    userId: 0,
+    userGems: 100,
+    userCoins: 600,
+    ownedAvatars: ['avatar1', 'avatar2'],
+    editCount: 0,
+    userStats: {
+        wins: 0,
+        losses: 0,
+        gamesPlayed: 0,
+        totalHours: 0,
+        observerCount: 0
+    },
+    hasBlueTick: false,
+    hasOrangeTick: false,
+    hasBrownTick: false,
+
+    avatars: { ...AVATARS },
+
+    getAvatarImage(avatar) {
+        if (this.avatars[avatar]) return this.avatars[avatar];
+        const newAvatar = NEW_AVATARS.find(a => a.id === avatar);
+        if (newAvatar) {
+            this.avatars[avatar] = newAvatar.url;
+            return newAvatar.url;
+        }
+        return this.avatars.avatar1;
+    },
+
+    showNotification(message) {
+        const notification = document.getElementById('copyNotification');
+        if (!notification) return;
+        notification.textContent = message;
+        notification.style.display = 'block';
+        setTimeout(() => notification.style.display = 'none', 2000);
+    },
+
+    loadUserData() {
+        try {
+            const savedData = localStorage.getItem('mafiaSun_userData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                this.userId = data.userId || 0;
+                this.userName = data.userName || 'بازیکن';
+                this.userGems = data.userGems !== undefined ? data.userGems : 100;
+                this.userCoins = data.userCoins !== undefined ? data.userCoins : 600;
+                this.ownedAvatars = data.ownedAvatars || ['avatar1', 'avatar2'];
+                this.currentAvatar = data.currentAvatar || 'avatar1';
+                this.editCount = data.editCount || 0;
+                this.userStats = data.userStats || { wins: 0, losses: 0, gamesPlayed: 0, totalHours: 0, observerCount: 0 };
+                this.hasBlueTick = data.hasBlueTick || false;
+                this.hasOrangeTick = data.hasOrangeTick || false;
+                this.hasBrownTick = data.hasBrownTick || false;
+            }
+            this.updateAllDisplays();
+        } catch (e) {
+            console.error('خطا در بارگذاری اطلاعات:', e);
+        }
+    },
+
+    saveUserData() {
+        const userData = {
+            userId: this.userId,
+            userName: this.userName,
+            userGems: this.userGems,
+            userCoins: this.userCoins,
+            ownedAvatars: this.ownedAvatars,
+            currentAvatar: this.currentAvatar,
+            editCount: this.editCount,
+            userStats: this.userStats,
+            hasBlueTick: this.hasBlueTick,
+            hasOrangeTick: this.hasOrangeTick,
+            hasBrownTick: this.hasBrownTick
+        };
+        localStorage.setItem('mafiaSun_userData', JSON.stringify(userData));
+    },
+
+    updateAllDisplays() {
+        this.updateMainProfile();
+        this.updateProfilePage();
+        this.updateMyAvatars();
+        this.updateShopAvatars();
+        this.updateCurrencyDisplay();
+        const userIdDisplay = document.getElementById('userIdDisplay');
+        if (userIdDisplay) userIdDisplay.textContent = this.userId.toLocaleString('fa-IR');
+    },
+
+    updateMainProfile() {
+        const profileAvatar = document.getElementById('mainProfileAvatar');
+        if (profileAvatar) profileAvatar.innerHTML = `<img src="${this.getAvatarImage(this.currentAvatar)}">`;
+        const profileName = document.getElementById('mainProfileName');
+        if (profileName) {
+            if (this.hasBlueTick) {
+                profileName.innerHTML = `<i class="fas fa-check-circle" style="color: #3b9eff;"></i> ${this.userName}`;
+            } else if (this.hasOrangeTick) {
+                profileName.innerHTML = `<i class="fas fa-check-circle" style="color: #ffaa00;"></i> ${this.userName}`;
+            } else if (this.hasBrownTick) {
+                profileName.innerHTML = `<i class="fas fa-check-circle" style="color: #8B4513;"></i> ${this.userName}`;
+            } else {
+                profileName.innerHTML = this.userName;
+            }
+        }
+        const profileLevel = document.getElementById('mainProfileLevel');
+        if (profileLevel) {
+            if (this.hasBlueTick) profileLevel.textContent = 'مدیریت';
+            else if (this.hasOrangeTick) profileLevel.textContent = 'ناظر';
+            else if (this.hasBrownTick) profileLevel.textContent = 'ادمین';
+            else profileLevel.textContent = 'سطح ۱';
+        }
+    },
+
+    updateCurrencyDisplay() {
+        const gemDisplay = document.getElementById('gemDisplay');
+        const coinDisplay = document.getElementById('coinDisplay');
+        if (gemDisplay) gemDisplay.textContent = this.userGems.toLocaleString('fa-IR');
+        if (coinDisplay) coinDisplay.textContent = this.userCoins.toLocaleString('fa-IR');
+    },
+
+    updateProfilePage() {
+        const profileImg = document.getElementById('profileAvatarImg');
+        if (profileImg) profileImg.src = this.getAvatarImage(this.currentAvatar);
+        const profileName = document.getElementById('profileUserName');
+        if (profileName) {
+            if (this.hasBlueTick) {
+                profileName.innerHTML = `<i class="fas fa-check-circle" style="color: #3b9eff;"></i> ${this.userName}`;
+            } else if (this.hasOrangeTick) {
+                profileName.innerHTML = `<i class="fas fa-check-circle" style="color: #ffaa00;"></i> ${this.userName}`;
+            } else if (this.hasBrownTick) {
+                profileName.innerHTML = `<i class="fas fa-check-circle" style="color: #8B4513;"></i> ${this.userName}`;
+            } else {
+                profileName.innerHTML = this.userName;
+            }
+        }
+        const levelBadge = document.getElementById('profileLevelBadge');
+        if (levelBadge) {
+            if (this.hasBlueTick) levelBadge.textContent = 'مدیریت';
+            else if (this.hasOrangeTick) levelBadge.textContent = 'ناظر';
+            else if (this.hasBrownTick) levelBadge.textContent = 'ادمین';
+            else levelBadge.textContent = 'سطح ۱';
+        }
+        const rankName = document.getElementById('rankName');
+        const rankTag = document.getElementById('rankTag');
+        if (rankName && rankTag) {
+            if (this.hasBlueTick) {
+                rankName.textContent = 'مدیریت';
+                rankTag.textContent = 'طلایی';
+            } else if (this.hasOrangeTick) {
+                rankName.textContent = 'ناظر';
+                rankTag.textContent = 'نارنجی';
+            } else if (this.hasBrownTick) {
+                rankName.textContent = 'ادمین';
+                rankTag.textContent = 'قهوه‌ای';
+            } else {
+                rankName.textContent = this.userStats?.rank || 'تازه‌وارد';
+                rankTag.textContent = this.userStats?.rankTag || 'برنزی';
+            }
+        }
+        const winCount = document.getElementById('winCount');
+        const loseCount = document.getElementById('loseCount');
+        const hoursPlayed = document.getElementById('hoursPlayed');
+        const observerCount = document.getElementById('observerCount');
+        if (winCount) winCount.textContent = this.userStats?.wins || 0;
+        if (loseCount) loseCount.textContent = this.userStats?.losses || 0;
+        if (hoursPlayed) hoursPlayed.textContent = this.userStats?.totalHours || 0;
+        if (observerCount) observerCount.textContent = this.userStats?.observerCount || 0;
+    },
+
+    updateMyAvatars() {
+        const myAvatarsGrid = document.getElementById('myAvatarsGrid');
+        if (!myAvatarsGrid) return;
+        let html = '';
+        const avatarsList = [
+            { id: 'avatar1', num: '#۰۰۱', img: this.avatars.avatar1 },
+            { id: 'avatar2', num: '#۰۰۲', img: this.avatars.avatar2 },
+            { id: 'ninja', num: '#۰۰۳', img: this.avatars.ninja },
+            { id: 'samurai', num: '#۰۰۴', img: this.avatars.samurai },
+            { id: 'avatar5', num: '#۰۰۵', img: this.avatars.avatar5 },
+            { id: 'avatar6', num: '#۰۰۶', img: this.avatars.avatar6 },
+            { id: 'avatar7', num: '#۰۰۷', img: this.avatars.avatar7 },
+            { id: 'avatar8', num: '#۰۰۸', img: this.avatars.avatar8 },
+            { id: 'avatar9', num: '#۰۰۹', img: this.avatars.avatar9 },
+            { id: 'avatar10', num: '#۰۱۰', img: this.avatars.avatar10 },
+            { id: 'avatar11', num: '#۰۱۱', img: this.avatars.avatar11 },
+            { id: 'avatar12', num: '#۰۱۲', img: this.avatars.avatar12 }
+        ];
+        [...avatarsList, ...NEW_AVATARS].forEach(avatar => {
+            if (this.ownedAvatars.includes(avatar.id)) {
+                html += `
+                    <div class="avatar-card ${this.currentAvatar === avatar.id ? 'selected' : ''}" onclick="app.selectAvatar('${avatar.id}')">
+                        <div class="avatar-thumb"><img src="${avatar.url || avatar.img}"></div>
+                        <div class="avatar-number">${avatar.num}</div>
+                        <button class="select-button" onclick="app.selectAvatar('${avatar.id}'); event.stopPropagation();">انتخاب</button>
+                    </div>
+                `;
+            }
+        });
+        myAvatarsGrid.innerHTML = html || '<div style="color: white; text-align: center; padding: 40px;">شما آواتاری ندارید</div>';
+    },
+
+    updateShopAvatars() {
+        const shopGrid = document.getElementById('shopGrid');
+        if (!shopGrid) return;
+        shopGrid.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
+                <div style="font-size: 80px; margin-bottom: 20px; color: #f9d77e;">🛒</div>
+                <div style="font-size: 32px; color: white; margin-bottom: 15px; font-weight: bold;">به زودی</div>
+                <div style="font-size: 18px; color: #8f9aa7;">فروشگاه آواتارها به زودی باز می‌شود</div>
+            </div>
+        `;
+    },
+
+    buyAvatar() {
+        this.showNotification('🛒 به زودی');
+    },
+
+    selectAvatar(avatarId) {
+        this.currentAvatar = avatarId;
+        this.saveUserData();
+        this.updateMyAvatars();
+        this.updateMainProfile();
+        this.updateProfilePage();
+        this.showNotification('✅ آواتار شما تغییر کرد');
+    },
+
+    openFriendlyHall() {
+        window.location.href = FRIENDLY_HALL_URL;
+    },
+
+    openCompetitive() {
+        this.showNotification('🏆 بخش رقابتی به زودی');
+    },
+
+    openCup() {
+        this.showNotification('🏆 بخش کاپ به زودی');
+    },
+
+    openClan() {
+        this.showNotification('👥 بخش کلن به زودی');
+    },
+
+    openShop() {
+        this.showNotification('🛒 فروشگاه به زودی');
+    },
+
+    openProfilePage() {
+        document.getElementById('main-game-page').style.display = 'none';
+        document.getElementById('profile-page').style.display = 'block';
+        this.updateProfilePage();
+    },
+
+    closeProfilePage() {
+        document.getElementById('profile-page').style.display = 'none';
+        document.getElementById('main-game-page').style.display = 'block';
+    },
+
+    openAvatarPage() {
+        document.getElementById('avatar-page').style.display = 'block';
+        this.updateMyAvatars();
+        this.updateShopAvatars();
+    },
+
+    closeAvatarPage() {
+        document.getElementById('avatar-page').style.display = 'none';
+        this.saveUserData();
+    },
+
+    switchAvatarTab(tab) {
+        const tabs = document.querySelectorAll('.avatar-tab');
+        const panels = document.querySelectorAll('.tab-panel');
+        tabs.forEach(t => t?.classList.remove('active'));
+        panels.forEach(p => p?.classList.remove('active'));
+        if (tab === 'my') {
+            if (tabs[0]) tabs[0].classList.add('active');
+            const myPanel = document.getElementById('myAvatarsPanel');
+            if (myPanel) myPanel.classList.add('active');
+        } else {
+            if (tabs[1]) tabs[1].classList.add('active');
+            const shopPanel = document.getElementById('shopPanel');
+            if (shopPanel) shopPanel.classList.add('active');
+            this.updateShopAvatars();
+        }
+    },
+
+    copyUserId() {
+        const userIdElement = document.getElementById('userIdDisplay');
+        const userIdText = userIdElement?.textContent;
+        if (userIdText && navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(userIdText);
+        }
+        this.showNotification('✅ کپی شد');
+    },
+
+    openEditModal() {
+        const modal = document.getElementById('editModal');
+        const coinMessage = document.getElementById('coinRequiredMessage');
+        const modalTitle = document.getElementById('modalTitle');
+        const nameInput = document.getElementById('editNameInput');
+        if (nameInput) nameInput.value = this.userName;
+        if (this.hasBlueTick || this.hasOrangeTick || this.hasBrownTick) {
+            if (modalTitle) modalTitle.innerHTML = 'تغییر نام (رایگان)';
+            if (coinMessage) coinMessage.style.display = 'none';
+        } else {
+            if (this.editCount === 0) {
+                if (modalTitle) modalTitle.innerHTML = 'تغییر نام (رایگان)';
+                if (coinMessage) coinMessage.style.display = 'none';
+            } else {
+                if (modalTitle) modalTitle.innerHTML = 'تغییر نام (۵ سکه)';
+                if (coinMessage) coinMessage.style.display = 'flex';
+            }
+        }
+        if (modal) modal.style.display = 'block';
+    },
+
+    closeEditModal() {
+        const modal = document.getElementById('editModal');
+        if (modal) modal.style.display = 'none';
+    },
+
+    saveUserName() {
+        const nameInput = document.getElementById('editNameInput');
+        if (!nameInput) return;
+        let newName = nameInput.value.trim();
+        if (!newName || newName.length < 2 || newName.length > 12) {
+            alert('نام باید بین ۲ تا ۱۲ حرف باشد');
+            return;
+        }
+        if (!this.hasBlueTick && !this.hasOrangeTick && !this.hasBrownTick) {
+            if (this.editCount > 0 && this.userCoins < 5) {
+                alert('سکه کافی ندارید');
+                return;
+            }
+            if (this.editCount > 0) this.userCoins -= 5;
+        }
+        this.userName = newName;
+        this.editCount++;
+        this.saveUserData();
+        this.updateMainProfile();
+        this.updateProfilePage();
+        this.updateCurrencyDisplay();
+        this.closeEditModal();
+        this.showNotification('✅ نام با موفقیت تغییر کرد');
+    },
+
+    logout() {
+        localStorage.removeItem('mafiaSun_userData');
+        localStorage.removeItem('mafiaSun_currentUser');
+        localStorage.removeItem('mafiaSun_loggedIn');
+        window.location.href = 'https://admin161723.github.io/Mafia_Sun_10.1000/';
+    }
+};
+
+window.addEventListener('DOMContentLoaded', function() {
+    App.loadUserData();
+});
+
+window.app = App;
+</script>
+</body>
+</html>
