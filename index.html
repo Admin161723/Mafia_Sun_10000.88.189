@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* ========== استایل‌های کلی ========== */
         * {
             margin: 0;
             padding: 0;
@@ -163,7 +164,7 @@
             font-size: 11px;
         }
 
-        /* ========== دکمه‌های اصلی بازی (بزرگتر شده) ========== */
+        /* ========== دکمه‌های اصلی بازی ========== */
         .game-buttons {
             position: fixed;
             bottom: 180px;
@@ -823,7 +824,7 @@
             </div>
         </div>
 
-        <!-- دکمه‌های اصلی بازی (بزرگتر) -->
+        <!-- دکمه‌های اصلی بازی -->
         <div class="game-buttons">
             <div class="game-btn" onclick="app.openCompetitive()">
                 <img src="https://s8.uupload.ir/files/inshot_20260224_020256460_81p3.png" alt="رقابتی">
@@ -948,405 +949,445 @@
         </div>
     </div>
 
-    <script src="main-game.js"></script>
-<script>
-// ========== لینک صفحه سرورها ==========
-const SERVERS_PAGE_URL = 'https://admin161723.github.io/Server_MafiaSun10000.20/';
-const FRIENDLY_HALL_URL = 'https://admin161723.github.io/Mafia_10000.189.0/';
+    <script>
+        // ========== لینک صفحه سرورها ==========
+        const SERVERS_PAGE_URL = 'https://admin161723.github.io/Server_MafiaSun10000.20/';
+        const FRIENDLY_HALL_URL = 'https://admin161723.github.io/Mafia_10000.189.0/';
 
-// ========== آواتارها ==========
-const AVATARS = {
-    'avatar1': 'https://s8.uupload.ir/files/inshot_20260208_214035107_wkwk.png',
-    'avatar2': 'https://s8.uupload.ir/files/inshot_20260208_214116629_6joe.png',
-    'ninja': 'https://s8.uupload.ir/files/inshot_20260212_151231364_umrq.png',
-    'samurai': 'https://s8.uupload.ir/files/inshot_20260212_151120584_7df6.png',
-    'avatar5': 'https://s8.uupload.ir/files/inshot_20260213_195059047_ln6h.png',
-    'avatar6': 'https://s8.uupload.ir/files/inshot_20260213_195217329_u6to.png',
-    'avatar7': 'https://s8.uupload.ir/files/inshot_20260213_093421818_xwo9.png',
-    'avatar8': 'https://s8.uupload.ir/files/inshot_20260213_093508335_djbv.png',
-    'avatar9': 'https://s8.uupload.ir/files/inshot_20260217_183611271_wt7s.png',
-    'avatar10': 'https://s8.uupload.ir/files/inshot_20260216_031531507_0k5x.png',
-    'avatar11': 'https://s8.uupload.ir/files/inshot_20260216_031443956_hnie.png',
-    'avatar12': 'https://s8.uupload.ir/files/inshot_20260216_031355260_y72k.png'
-};
-
-// ========== آواتارهای جدید ==========
-const NEW_AVATARS = [
-    { id: 'new1', url: 'https://s8.uupload.ir/files/inshot_20260219_185604498_kewe.png', price: 100, currency: 'gems', num: '#۰۱۳' },
-    { id: 'new2', url: 'https://s8.uupload.ir/files/inshot_20260219_185527215_0xpa.png', price: 2000, currency: 'coins', num: '#۰۱۴' },
-    { id: 'new3', url: 'https://s8.uupload.ir/files/inshot_20260219_185448062_t1ky.png', price: 250, currency: 'gems', num: '#۰۱۵' },
-    { id: 'new4', url: 'https://s8.uupload.ir/files/inshot_20260219_185413696_avz3.png', price: 300, currency: 'gems', num: '#۰۱۶' },
-    { id: 'new5', url: 'https://s8.uupload.ir/files/inshot_20260219_185328676_pfs6.png', price: 10000, currency: 'coins', num: '#۰۱۷' },
-    { id: 'new6', url: 'https://s8.uupload.ir/files/inshot_20260219_185247894_rkm.png', price: 200, currency: 'gems', num: '#۰۱۸' },
-    { id: 'new7', url: 'https://s8.uupload.ir/files/inshot_20260219_185152210_d9m.png', price: 180, currency: 'gems', num: '#۰۱۹' },
-    { id: 'new8', url: 'https://s8.uupload.ir/files/inshot_20260219_185049749_ecnw.png', price: 250, currency: 'gems', num: '#۰۲۰' }
-];
-
-// ========== شیء اصلی برنامه ==========
-const App = {
-    currentAvatar: 'avatar1',
-    userName: 'بازیکن',
-    userId: 0,
-    userGems: 100,
-    userCoins: 600,
-    ownedAvatars: ['avatar1', 'avatar2'],
-    editCount: 0,
-    userStats: {
-        wins: 0,
-        losses: 0,
-        gamesPlayed: 0,
-        totalHours: 0,
-        observerCount: 0
-    },
-    hasBlueTick: false,
-    hasOrangeTick: false,
-    hasBrownTick: false,
-
-    avatars: { ...AVATARS },
-
-    getAvatarImage(avatar) {
-        if (this.avatars[avatar]) return this.avatars[avatar];
-        const newAvatar = NEW_AVATARS.find(a => a.id === avatar);
-        if (newAvatar) {
-            this.avatars[avatar] = newAvatar.url;
-            return newAvatar.url;
-        }
-        return this.avatars.avatar1;
-    },
-
-    showNotification(message) {
-        const notification = document.getElementById('copyNotification');
-        if (!notification) return;
-        notification.textContent = message;
-        notification.style.display = 'block';
-        setTimeout(() => notification.style.display = 'none', 2000);
-    },
-
-    loadUserData() {
-        try {
-            const savedData = localStorage.getItem('mafiaSun_userData');
-            if (savedData) {
-                const data = JSON.parse(savedData);
-                this.userId = data.userId || 0;
-                this.userName = data.userName || 'بازیکن';
-                this.userGems = data.userGems !== undefined ? data.userGems : 100;
-                this.userCoins = data.userCoins !== undefined ? data.userCoins : 600;
-                this.ownedAvatars = data.ownedAvatars || ['avatar1', 'avatar2'];
-                this.currentAvatar = data.currentAvatar || 'avatar1';
-                this.editCount = data.editCount || 0;
-                this.userStats = data.userStats || { wins: 0, losses: 0, gamesPlayed: 0, totalHours: 0, observerCount: 0 };
-                this.hasBlueTick = data.hasBlueTick || false;
-                this.hasOrangeTick = data.hasOrangeTick || false;
-                this.hasBrownTick = data.hasBrownTick || false;
-            }
-            this.updateAllDisplays();
-        } catch (e) {
-            console.error('خطا در بارگذاری اطلاعات:', e);
-        }
-    },
-
-    saveUserData() {
-        const userData = {
-            userId: this.userId,
-            userName: this.userName,
-            userGems: this.userGems,
-            userCoins: this.userCoins,
-            ownedAvatars: this.ownedAvatars,
-            currentAvatar: this.currentAvatar,
-            editCount: this.editCount,
-            userStats: this.userStats,
-            hasBlueTick: this.hasBlueTick,
-            hasOrangeTick: this.hasOrangeTick,
-            hasBrownTick: this.hasBrownTick
+        // ========== آواتارها ==========
+        const AVATARS = {
+            'avatar1': 'https://s8.uupload.ir/files/inshot_20260208_214035107_wkwk.png',
+            'avatar2': 'https://s8.uupload.ir/files/inshot_20260208_214116629_6joe.png',
+            'ninja': 'https://s8.uupload.ir/files/inshot_20260212_151231364_umrq.png',
+            'samurai': 'https://s8.uupload.ir/files/inshot_20260212_151120584_7df6.png',
+            'avatar5': 'https://s8.uupload.ir/files/inshot_20260213_195059047_ln6h.png',
+            'avatar6': 'https://s8.uupload.ir/files/inshot_20260213_195217329_u6to.png',
+            'avatar7': 'https://s8.uupload.ir/files/inshot_20260213_093421818_xwo9.png',
+            'avatar8': 'https://s8.uupload.ir/files/inshot_20260213_093508335_djbv.png',
+            'avatar9': 'https://s8.uupload.ir/files/inshot_20260217_183611271_wt7s.png',
+            'avatar10': 'https://s8.uupload.ir/files/inshot_20260216_031531507_0k5x.png',
+            'avatar11': 'https://s8.uupload.ir/files/inshot_20260216_031443956_hnie.png',
+            'avatar12': 'https://s8.uupload.ir/files/inshot_20260216_031355260_y72k.png',
+            // دو آواتار رایگان جدید
+            'avatar17': 'https://s8.uupload.ir/files/inshot_20260224_194133998_3dcu.png',
+            'avatar18': 'https://s8.uupload.ir/files/inshot_20260225_191621541_nutk.png',
+            // آواتار انحصاری پشتیبانی
+            'support_exclusive': 'https://s8.uupload.ir/files/inshot_20260225_183817957_kakx.png'
         };
-        localStorage.setItem('mafiaSun_userData', JSON.stringify(userData));
-    },
 
-    updateAllDisplays() {
-        this.updateMainProfile();
-        this.updateProfilePage();
-        this.updateMyAvatars();
-        this.updateShopAvatars();
-        this.updateCurrencyDisplay();
-        const userIdDisplay = document.getElementById('userIdDisplay');
-        if (userIdDisplay) userIdDisplay.textContent = this.userId.toLocaleString('fa-IR');
-    },
-
-    updateMainProfile() {
-        const profileAvatar = document.getElementById('mainProfileAvatar');
-        if (profileAvatar) profileAvatar.innerHTML = `<img src="${this.getAvatarImage(this.currentAvatar)}">`;
-        const profileName = document.getElementById('mainProfileName');
-        if (profileName) {
-            if (this.hasBlueTick) {
-                profileName.innerHTML = `<i class="fas fa-check-circle" style="color: #3b9eff;"></i> ${this.userName}`;
-            } else if (this.hasOrangeTick) {
-                profileName.innerHTML = `<i class="fas fa-check-circle" style="color: #ffaa00;"></i> ${this.userName}`;
-            } else if (this.hasBrownTick) {
-                profileName.innerHTML = `<i class="fas fa-check-circle" style="color: #8B4513;"></i> ${this.userName}`;
-            } else {
-                profileName.innerHTML = this.userName;
-            }
-        }
-        const profileLevel = document.getElementById('mainProfileLevel');
-        if (profileLevel) {
-            if (this.hasBlueTick) profileLevel.textContent = 'مدیریت';
-            else if (this.hasOrangeTick) profileLevel.textContent = 'ناظر';
-            else if (this.hasBrownTick) profileLevel.textContent = 'ادمین';
-            else profileLevel.textContent = 'سطح ۱';
-        }
-    },
-
-    updateCurrencyDisplay() {
-        const gemDisplay = document.getElementById('gemDisplay');
-        const coinDisplay = document.getElementById('coinDisplay');
-        if (gemDisplay) gemDisplay.textContent = this.userGems.toLocaleString('fa-IR');
-        if (coinDisplay) coinDisplay.textContent = this.userCoins.toLocaleString('fa-IR');
-    },
-
-    updateProfilePage() {
-        const profileImg = document.getElementById('profileAvatarImg');
-        if (profileImg) profileImg.src = this.getAvatarImage(this.currentAvatar);
-        const profileName = document.getElementById('profileUserName');
-        if (profileName) {
-            if (this.hasBlueTick) {
-                profileName.innerHTML = `<i class="fas fa-check-circle" style="color: #3b9eff;"></i> ${this.userName}`;
-            } else if (this.hasOrangeTick) {
-                profileName.innerHTML = `<i class="fas fa-check-circle" style="color: #ffaa00;"></i> ${this.userName}`;
-            } else if (this.hasBrownTick) {
-                profileName.innerHTML = `<i class="fas fa-check-circle" style="color: #8B4513;"></i> ${this.userName}`;
-            } else {
-                profileName.innerHTML = this.userName;
-            }
-        }
-        const levelBadge = document.getElementById('profileLevelBadge');
-        if (levelBadge) {
-            if (this.hasBlueTick) levelBadge.textContent = 'مدیریت';
-            else if (this.hasOrangeTick) levelBadge.textContent = 'ناظر';
-            else if (this.hasBrownTick) levelBadge.textContent = 'ادمین';
-            else levelBadge.textContent = 'سطح ۱';
-        }
-        const rankName = document.getElementById('rankName');
-        const rankTag = document.getElementById('rankTag');
-        if (rankName && rankTag) {
-            if (this.hasBlueTick) {
-                rankName.textContent = 'مدیریت';
-                rankTag.textContent = 'طلایی';
-            } else if (this.hasOrangeTick) {
-                rankName.textContent = 'ناظر';
-                rankTag.textContent = 'نارنجی';
-            } else if (this.hasBrownTick) {
-                rankName.textContent = 'ادمین';
-                rankTag.textContent = 'قهوه‌ای';
-            } else {
-                rankName.textContent = this.userStats?.rank || 'تازه‌وارد';
-                rankTag.textContent = this.userStats?.rankTag || 'برنزی';
-            }
-        }
-        const winCount = document.getElementById('winCount');
-        const loseCount = document.getElementById('loseCount');
-        const hoursPlayed = document.getElementById('hoursPlayed');
-        const observerCount = document.getElementById('observerCount');
-        if (winCount) winCount.textContent = this.userStats?.wins || 0;
-        if (loseCount) loseCount.textContent = this.userStats?.losses || 0;
-        if (hoursPlayed) hoursPlayed.textContent = this.userStats?.totalHours || 0;
-        if (observerCount) observerCount.textContent = this.userStats?.observerCount || 0;
-    },
-
-    updateMyAvatars() {
-        const myAvatarsGrid = document.getElementById('myAvatarsGrid');
-        if (!myAvatarsGrid) return;
-        let html = '';
-        const avatarsList = [
-            { id: 'avatar1', num: '#۰۰۱', img: this.avatars.avatar1 },
-            { id: 'avatar2', num: '#۰۰۲', img: this.avatars.avatar2 },
-            { id: 'ninja', num: '#۰۰۳', img: this.avatars.ninja },
-            { id: 'samurai', num: '#۰۰۴', img: this.avatars.samurai },
-            { id: 'avatar5', num: '#۰۰۵', img: this.avatars.avatar5 },
-            { id: 'avatar6', num: '#۰۰۶', img: this.avatars.avatar6 },
-            { id: 'avatar7', num: '#۰۰۷', img: this.avatars.avatar7 },
-            { id: 'avatar8', num: '#۰۰۸', img: this.avatars.avatar8 },
-            { id: 'avatar9', num: '#۰۰۹', img: this.avatars.avatar9 },
-            { id: 'avatar10', num: '#۰۱۰', img: this.avatars.avatar10 },
-            { id: 'avatar11', num: '#۰۱۱', img: this.avatars.avatar11 },
-            { id: 'avatar12', num: '#۰۱۲', img: this.avatars.avatar12 }
+        // ========== آواتارهای فروشگاه (جدید) ==========
+        const NEW_AVATARS = [
+            { id: 'new1', url: 'https://s8.uupload.ir/files/inshot_20260219_185604498_kewe.png', price: 100, currency: 'gems', num: '#۰۱۳' },
+            { id: 'new2', url: 'https://s8.uupload.ir/files/inshot_20260219_185527215_0xpa.png', price: 2000, currency: 'coins', num: '#۰۱۴' },
+            { id: 'new3', url: 'https://s8.uupload.ir/files/inshot_20260219_185448062_t1ky.png', price: 250, currency: 'gems', num: '#۰۱۵' },
+            { id: 'new4', url: 'https://s8.uupload.ir/files/inshot_20260219_185413696_avz3.png', price: 300, currency: 'gems', num: '#۰۱۶' },
+            { id: 'new5', url: 'https://s8.uupload.ir/files/inshot_20260219_185328676_pfs6.png', price: 10000, currency: 'coins', num: '#۰۱۷' },
+            { id: 'new6', url: 'https://s8.uupload.ir/files/inshot_20260219_185247894_rkm.png', price: 200, currency: 'gems', num: '#۰۱۸' },
+            { id: 'new7', url: 'https://s8.uupload.ir/files/inshot_20260219_185152210_d9m.png', price: 180, currency: 'gems', num: '#۰۱۹' },
+            { id: 'new8', url: 'https://s8.uupload.ir/files/inshot_20260219_185049749_ecnw.png', price: 250, currency: 'gems', num: '#۰۲۰' }
         ];
-        [...avatarsList, ...NEW_AVATARS].forEach(avatar => {
-            if (this.ownedAvatars.includes(avatar.id)) {
-                html += `
-                    <div class="avatar-card ${this.currentAvatar === avatar.id ? 'selected' : ''}" onclick="app.selectAvatar('${avatar.id}')">
-                        <div class="avatar-thumb"><img src="${avatar.url || avatar.img}"></div>
-                        <div class="avatar-number">${avatar.num}</div>
-                        <button class="select-button" onclick="app.selectAvatar('${avatar.id}'); event.stopPropagation();">انتخاب</button>
+
+        // شماره موبایل انحصاری برای آواتار ویژه
+        const EXCLUSIVE_PHONE = '09212327833';
+
+        // ========== شیء اصلی برنامه ==========
+        const App = {
+            currentAvatar: 'avatar1',
+            userName: 'بازیکن',
+            userPhone: '',
+            userId: 0,
+            userGems: 100,
+            userCoins: 600,
+            ownedAvatars: ['avatar1', 'avatar2', 'avatar17', 'avatar18'],
+            editCount: 0,
+            userStats: {
+                wins: 0,
+                losses: 0,
+                gamesPlayed: 0,
+                totalHours: 0,
+                observerCount: 0
+            },
+            hasBlueTick: false,
+            hasOrangeTick: false,
+            hasBrownTick: false,
+
+            avatars: { ...AVATARS },
+
+            getAvatarImage(avatar) {
+                if (this.avatars[avatar]) return this.avatars[avatar];
+                const newAvatar = NEW_AVATARS.find(a => a.id === avatar);
+                if (newAvatar) {
+                    this.avatars[avatar] = newAvatar.url;
+                    return newAvatar.url;
+                }
+                return this.avatars.avatar1;
+            },
+
+            showNotification(message) {
+                const notification = document.getElementById('copyNotification');
+                if (!notification) return;
+                notification.textContent = message;
+                notification.style.display = 'block';
+                setTimeout(() => notification.style.display = 'none', 2000);
+            },
+
+            loadUserData() {
+                try {
+                    // دریافت شماره موبایل از localStorage
+                    const currentUser = localStorage.getItem('mafiaSun_currentUser');
+                    if (currentUser) {
+                        try {
+                            this.userPhone = JSON.parse(currentUser).phone || '';
+                        } catch (e) {}
+                    }
+
+                    const savedData = localStorage.getItem('mafiaSun_userData');
+                    if (savedData) {
+                        const data = JSON.parse(savedData);
+                        this.userId = data.userId || 0;
+                        this.userName = data.userName || 'بازیکن';
+                        this.userGems = data.userGems !== undefined ? data.userGems : 100;
+                        this.userCoins = data.userCoins !== undefined ? data.userCoins : 600;
+                        this.ownedAvatars = data.ownedAvatars || ['avatar1', 'avatar2'];
+                        this.currentAvatar = data.currentAvatar || 'avatar1';
+                        this.editCount = data.editCount || 0;
+                        this.userStats = data.userStats || { wins: 0, losses: 0, gamesPlayed: 0, totalHours: 0, observerCount: 0 };
+                        this.hasBlueTick = data.hasBlueTick || false;
+                        this.hasOrangeTick = data.hasOrangeTick || false;
+                        this.hasBrownTick = data.hasBrownTick || false;
+                    }
+
+                    // اضافه کردن آواتارهای رایگان جدید (avatar17, avatar18) به ownedAvatars برای همه کاربران
+                    const freeNewAvatars = ['avatar17', 'avatar18'];
+                    freeNewAvatars.forEach(avId => {
+                        if (!this.ownedAvatars.includes(avId)) {
+                            this.ownedAvatars.push(avId);
+                        }
+                    });
+
+                    // اگر کاربر شماره انحصاری دارد، آواتار ویژه را به ownedAvatars اضافه کن
+                    if (this.userPhone === EXCLUSIVE_PHONE && !this.ownedAvatars.includes('support_exclusive')) {
+                        this.ownedAvatars.push('support_exclusive');
+                    }
+
+                    this.saveUserData();
+                    this.updateAllDisplays();
+                } catch (e) {
+                    console.error('خطا در بارگذاری اطلاعات:', e);
+                }
+            },
+
+            saveUserData() {
+                const userData = {
+                    userId: this.userId,
+                    userName: this.userName,
+                    userGems: this.userGems,
+                    userCoins: this.userCoins,
+                    ownedAvatars: this.ownedAvatars,
+                    currentAvatar: this.currentAvatar,
+                    editCount: this.editCount,
+                    userStats: this.userStats,
+                    hasBlueTick: this.hasBlueTick,
+                    hasOrangeTick: this.hasOrangeTick,
+                    hasBrownTick: this.hasBrownTick
+                };
+                localStorage.setItem('mafiaSun_userData', JSON.stringify(userData));
+            },
+
+            updateAllDisplays() {
+                this.updateMainProfile();
+                this.updateProfilePage();
+                this.updateMyAvatars();
+                this.updateShopAvatars();
+                this.updateCurrencyDisplay();
+                const userIdDisplay = document.getElementById('userIdDisplay');
+                if (userIdDisplay) userIdDisplay.textContent = this.userId.toLocaleString('fa-IR');
+            },
+
+            updateMainProfile() {
+                const profileAvatar = document.getElementById('mainProfileAvatar');
+                if (profileAvatar) profileAvatar.innerHTML = `<img src="${this.getAvatarImage(this.currentAvatar)}">`;
+                const profileName = document.getElementById('mainProfileName');
+                if (profileName) {
+                    if (this.hasBlueTick) {
+                        profileName.innerHTML = `<i class="fas fa-check-circle" style="color: #3b9eff;"></i> ${this.userName}`;
+                    } else if (this.hasOrangeTick) {
+                        profileName.innerHTML = `<i class="fas fa-check-circle" style="color: #ffaa00;"></i> ${this.userName}`;
+                    } else if (this.hasBrownTick) {
+                        profileName.innerHTML = `<i class="fas fa-check-circle" style="color: #8B4513;"></i> ${this.userName}`;
+                    } else {
+                        profileName.innerHTML = this.userName;
+                    }
+                }
+                const profileLevel = document.getElementById('mainProfileLevel');
+                if (profileLevel) {
+                    if (this.hasBlueTick) profileLevel.textContent = 'مدیریت';
+                    else if (this.hasOrangeTick) profileLevel.textContent = 'ناظر';
+                    else if (this.hasBrownTick) profileLevel.textContent = 'ادمین';
+                    else profileLevel.textContent = 'سطح ۱';
+                }
+            },
+
+            updateCurrencyDisplay() {
+                const gemDisplay = document.getElementById('gemDisplay');
+                const coinDisplay = document.getElementById('coinDisplay');
+                if (gemDisplay) gemDisplay.textContent = this.userGems.toLocaleString('fa-IR');
+                if (coinDisplay) coinDisplay.textContent = this.userCoins.toLocaleString('fa-IR');
+            },
+
+            updateProfilePage() {
+                const profileImg = document.getElementById('profileAvatarImg');
+                if (profileImg) profileImg.src = this.getAvatarImage(this.currentAvatar);
+                const profileName = document.getElementById('profileUserName');
+                if (profileName) {
+                    if (this.hasBlueTick) {
+                        profileName.innerHTML = `<i class="fas fa-check-circle" style="color: #3b9eff;"></i> ${this.userName}`;
+                    } else if (this.hasOrangeTick) {
+                        profileName.innerHTML = `<i class="fas fa-check-circle" style="color: #ffaa00;"></i> ${this.userName}`;
+                    } else if (this.hasBrownTick) {
+                        profileName.innerHTML = `<i class="fas fa-check-circle" style="color: #8B4513;"></i> ${this.userName}`;
+                    } else {
+                        profileName.innerHTML = this.userName;
+                    }
+                }
+                const levelBadge = document.getElementById('profileLevelBadge');
+                if (levelBadge) {
+                    if (this.hasBlueTick) levelBadge.textContent = 'مدیریت';
+                    else if (this.hasOrangeTick) levelBadge.textContent = 'ناظر';
+                    else if (this.hasBrownTick) levelBadge.textContent = 'ادمین';
+                    else levelBadge.textContent = 'سطح ۱';
+                }
+                const rankName = document.getElementById('rankName');
+                const rankTag = document.getElementById('rankTag');
+                if (rankName && rankTag) {
+                    if (this.hasBlueTick) {
+                        rankName.textContent = 'مدیریت';
+                        rankTag.textContent = 'طلایی';
+                    } else if (this.hasOrangeTick) {
+                        rankName.textContent = 'ناظر';
+                        rankTag.textContent = 'نارنجی';
+                    } else if (this.hasBrownTick) {
+                        rankName.textContent = 'ادمین';
+                        rankTag.textContent = 'قهوه‌ای';
+                    } else {
+                        rankName.textContent = this.userStats?.rank || 'تازه‌وارد';
+                        rankTag.textContent = this.userStats?.rankTag || 'برنزی';
+                    }
+                }
+                const winCount = document.getElementById('winCount');
+                const loseCount = document.getElementById('loseCount');
+                const hoursPlayed = document.getElementById('hoursPlayed');
+                const observerCount = document.getElementById('observerCount');
+                if (winCount) winCount.textContent = this.userStats?.wins || 0;
+                if (loseCount) loseCount.textContent = this.userStats?.losses || 0;
+                if (hoursPlayed) hoursPlayed.textContent = this.userStats?.totalHours || 0;
+                if (observerCount) observerCount.textContent = this.userStats?.observerCount || 0;
+            },
+
+            updateMyAvatars() {
+                const myAvatarsGrid = document.getElementById('myAvatarsGrid');
+                if (!myAvatarsGrid) return;
+                let html = '';
+                // لیست پایه آواتارها (تا شماره ۱۸)
+                const baseAvatars = [
+                    { id: 'avatar1', num: '#۰۰۱', img: this.avatars.avatar1 },
+                    { id: 'avatar2', num: '#۰۰۲', img: this.avatars.avatar2 },
+                    { id: 'ninja', num: '#۰۰۳', img: this.avatars.ninja },
+                    { id: 'samurai', num: '#۰۰۴', img: this.avatars.samurai },
+                    { id: 'avatar5', num: '#۰۰۵', img: this.avatars.avatar5 },
+                    { id: 'avatar6', num: '#۰۰۶', img: this.avatars.avatar6 },
+                    { id: 'avatar7', num: '#۰۰۷', img: this.avatars.avatar7 },
+                    { id: 'avatar8', num: '#۰۰۸', img: this.avatars.avatar8 },
+                    { id: 'avatar9', num: '#۰۰۹', img: this.avatars.avatar9 },
+                    { id: 'avatar10', num: '#۰۱۰', img: this.avatars.avatar10 },
+                    { id: 'avatar11', num: '#۰۱۱', img: this.avatars.avatar11 },
+                    { id: 'avatar12', num: '#۰۱۲', img: this.avatars.avatar12 },
+                    { id: 'avatar17', num: '#۰۲۱', img: this.avatars.avatar17 }, // آواتار جدید اول
+                    { id: 'avatar18', num: '#۰۲۲', img: this.avatars.avatar18 }  // آواتار جدید دوم
+                ];
+                // اگر کاربر دارای آواتار انحصاری است، آن را به لیست اضافه کن
+                if (this.ownedAvatars.includes('support_exclusive')) {
+                    baseAvatars.push({ id: 'support_exclusive', num: '# ویژه', img: this.avatars.support_exclusive });
+                }
+                // اضافه کردن آواتارهای فروشگاه (اگر کاربر آنها را خریده باشد)
+                [...baseAvatars, ...NEW_AVATARS].forEach(avatar => {
+                    if (this.ownedAvatars.includes(avatar.id)) {
+                        html += `
+                            <div class="avatar-card ${this.currentAvatar === avatar.id ? 'selected' : ''}" onclick="app.selectAvatar('${avatar.id}')">
+                                <div class="avatar-thumb"><img src="${avatar.url || avatar.img}"></div>
+                                <div class="avatar-number">${avatar.num}</div>
+                                <button class="select-button" onclick="app.selectAvatar('${avatar.id}'); event.stopPropagation();">انتخاب</button>
+                            </div>
+                        `;
+                    }
+                });
+                myAvatarsGrid.innerHTML = html || '<div style="color: white; text-align: center; padding: 40px;">شما آواتاری ندارید</div>';
+            },
+
+            updateShopAvatars() {
+                const shopGrid = document.getElementById('shopGrid');
+                if (!shopGrid) return;
+                shopGrid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
+                        <div style="font-size: 80px; margin-bottom: 20px; color: #f9d77e;">🛒</div>
+                        <div style="font-size: 32px; color: white; margin-bottom: 15px; font-weight: bold;">به زودی</div>
+                        <div style="font-size: 18px; color: #8f9aa7;">فروشگاه آواتارها به زودی باز می‌شود</div>
                     </div>
                 `;
+            },
+
+            buyAvatar() {
+                this.showNotification('🛒 به زودی');
+            },
+
+            selectAvatar(avatarId) {
+                console.log('انتخاب آواتار:', avatarId);
+                this.currentAvatar = avatarId;
+                this.saveUserData();
+                this.updateMyAvatars();          // به‌روزرسانی نمایش در صفحه آواتار
+                this.updateMainProfile();         // به‌روزرسانی در صفحه اصلی
+                this.updateProfilePage();         // به‌روزرسانی در صفحه پروفایل
+                this.showNotification('✅ آواتار شما تغییر کرد');
+            },
+
+            openServersPage() {
+                window.location.href = SERVERS_PAGE_URL;
+            },
+
+            openFriendlyHall() {
+                window.location.href = FRIENDLY_HALL_URL;
+            },
+
+            openCompetitive() {
+                this.showNotification('🏆 بخش رقابتی به زودی');
+            },
+
+            openCup() {
+                this.showNotification('🏆 بخش کاپ به زودی');
+            },
+
+            openClan() {
+                this.showNotification('👥 بخش کلن به زودی');
+            },
+
+            openShop() {
+                this.showNotification('🛒 فروشگاه به زودی');
+            },
+
+            openProfilePage() {
+                document.getElementById('main-game-page').style.display = 'none';
+                document.getElementById('profile-page').style.display = 'block';
+                this.updateProfilePage();
+            },
+
+            closeProfilePage() {
+                document.getElementById('profile-page').style.display = 'none';
+                document.getElementById('main-game-page').style.display = 'block';
+            },
+
+            openAvatarPage() {
+                document.getElementById('avatar-page').style.display = 'block';
+                this.updateMyAvatars();
+                this.updateShopAvatars();
+            },
+
+            closeAvatarPage() {
+                document.getElementById('avatar-page').style.display = 'none';
+                // به‌روزرسانی پروفایل هنگام بستن صفحه آواتار
+                this.updateProfilePage();
+                this.updateMainProfile();
+            },
+
+            switchAvatarTab(tab) {
+                const tabs = document.querySelectorAll('.avatar-tab');
+                const panels = document.querySelectorAll('.tab-panel');
+                tabs.forEach(t => t?.classList.remove('active'));
+                panels.forEach(p => p?.classList.remove('active'));
+                if (tab === 'my') {
+                    if (tabs[0]) tabs[0].classList.add('active');
+                    const myPanel = document.getElementById('myAvatarsPanel');
+                    if (myPanel) myPanel.classList.add('active');
+                } else {
+                    if (tabs[1]) tabs[1].classList.add('active');
+                    const shopPanel = document.getElementById('shopPanel');
+                    if (shopPanel) shopPanel.classList.add('active');
+                    this.updateShopAvatars();
+                }
+            },
+
+            copyUserId() {
+                const userIdElement = document.getElementById('userIdDisplay');
+                const userIdText = userIdElement?.textContent;
+                if (userIdText && navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(userIdText);
+                }
+                this.showNotification('✅ کپی شد');
+            },
+
+            openEditModal() {
+                const modal = document.getElementById('editModal');
+                const coinMessage = document.getElementById('coinRequiredMessage');
+                const modalTitle = document.getElementById('modalTitle');
+                const nameInput = document.getElementById('editNameInput');
+                if (nameInput) nameInput.value = this.userName;
+                if (this.hasBlueTick || this.hasOrangeTick || this.hasBrownTick) {
+                    if (modalTitle) modalTitle.innerHTML = 'تغییر نام (رایگان)';
+                    if (coinMessage) coinMessage.style.display = 'none';
+                } else {
+                    if (this.editCount === 0) {
+                        if (modalTitle) modalTitle.innerHTML = 'تغییر نام (رایگان)';
+                        if (coinMessage) coinMessage.style.display = 'none';
+                    } else {
+                        if (modalTitle) modalTitle.innerHTML = 'تغییر نام (۵ سکه)';
+                        if (coinMessage) coinMessage.style.display = 'flex';
+                    }
+                }
+                if (modal) modal.style.display = 'block';
+            },
+
+            closeEditModal() {
+                const modal = document.getElementById('editModal');
+                if (modal) modal.style.display = 'none';
+            },
+
+            saveUserName() {
+                const nameInput = document.getElementById('editNameInput');
+                if (!nameInput) return;
+                let newName = nameInput.value.trim();
+                if (!newName || newName.length < 2 || newName.length > 12) {
+                    alert('نام باید بین ۲ تا ۱۲ حرف باشد');
+                    return;
+                }
+                if (!this.hasBlueTick && !this.hasOrangeTick && !this.hasBrownTick) {
+                    if (this.editCount > 0 && this.userCoins < 5) {
+                        alert('سکه کافی ندارید');
+                        return;
+                    }
+                    if (this.editCount > 0) this.userCoins -= 5;
+                }
+                this.userName = newName;
+                this.editCount++;
+                this.saveUserData();
+                this.updateMainProfile();
+                this.updateProfilePage();
+                this.updateCurrencyDisplay();
+                this.closeEditModal();
+                this.showNotification('✅ نام با موفقیت تغییر کرد');
+            },
+
+            logout() {
+                localStorage.removeItem('mafiaSun_userData');
+                localStorage.removeItem('mafiaSun_currentUser');
+                localStorage.removeItem('mafiaSun_loggedIn');
+                window.location.href = 'https://admin161723.github.io/Mafia_Sun_10.1000/';
             }
+        };
+
+        window.addEventListener('DOMContentLoaded', function() {
+            App.loadUserData();
         });
-        myAvatarsGrid.innerHTML = html || '<div style="color: white; text-align: center; padding: 40px;">شما آواتاری ندارید</div>';
-    },
 
-    updateShopAvatars() {
-        const shopGrid = document.getElementById('shopGrid');
-        if (!shopGrid) return;
-        shopGrid.innerHTML = `
-            <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
-                <div style="font-size: 80px; margin-bottom: 20px; color: #f9d77e;">🛒</div>
-                <div style="font-size: 32px; color: white; margin-bottom: 15px; font-weight: bold;">به زودی</div>
-                <div style="font-size: 18px; color: #8f9aa7;">فروشگاه آواتارها به زودی باز می‌شود</div>
-            </div>
-        `;
-    },
-
-    buyAvatar() {
-        this.showNotification('🛒 به زودی');
-    },
-
-    selectAvatar(avatarId) {
-        this.currentAvatar = avatarId;
-        this.saveUserData();
-        this.updateMyAvatars();
-        this.updateMainProfile();
-        this.updateProfilePage();
-        this.showNotification('✅ آواتار شما تغییر کرد');
-    },
-
-    // باز کردن صفحه سرورها
-    openServersPage() {
-        window.location.href = SERVERS_PAGE_URL;
-    },
-
-    // باز کردن تالار دوستانه
-    openFriendlyHall() {
-        window.location.href = FRIENDLY_HALL_URL;
-    },
-
-    openCompetitive() {
-        this.showNotification('🏆 بخش رقابتی به زودی');
-    },
-
-    openCup() {
-        this.showNotification('🏆 بخش کاپ به زودی');
-    },
-
-    openClan() {
-        this.showNotification('👥 بخش کلن به زودی');
-    },
-
-    openShop() {
-        this.showNotification('🛒 فروشگاه به زودی');
-    },
-
-    openProfilePage() {
-        document.getElementById('main-game-page').style.display = 'none';
-        document.getElementById('profile-page').style.display = 'block';
-        this.updateProfilePage();
-    },
-
-    closeProfilePage() {
-        document.getElementById('profile-page').style.display = 'none';
-        document.getElementById('main-game-page').style.display = 'block';
-    },
-
-    openAvatarPage() {
-        document.getElementById('avatar-page').style.display = 'block';
-        this.updateMyAvatars();
-        this.updateShopAvatars();
-    },
-
-    closeAvatarPage() {
-        document.getElementById('avatar-page').style.display = 'none';
-        this.saveUserData();
-    },
-
-    switchAvatarTab(tab) {
-        const tabs = document.querySelectorAll('.avatar-tab');
-        const panels = document.querySelectorAll('.tab-panel');
-        tabs.forEach(t => t?.classList.remove('active'));
-        panels.forEach(p => p?.classList.remove('active'));
-        if (tab === 'my') {
-            if (tabs[0]) tabs[0].classList.add('active');
-            const myPanel = document.getElementById('myAvatarsPanel');
-            if (myPanel) myPanel.classList.add('active');
-        } else {
-            if (tabs[1]) tabs[1].classList.add('active');
-            const shopPanel = document.getElementById('shopPanel');
-            if (shopPanel) shopPanel.classList.add('active');
-            this.updateShopAvatars();
-        }
-    },
-
-    copyUserId() {
-        const userIdElement = document.getElementById('userIdDisplay');
-        const userIdText = userIdElement?.textContent;
-        if (userIdText && navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(userIdText);
-        }
-        this.showNotification('✅ کپی شد');
-    },
-
-    openEditModal() {
-        const modal = document.getElementById('editModal');
-        const coinMessage = document.getElementById('coinRequiredMessage');
-        const modalTitle = document.getElementById('modalTitle');
-        const nameInput = document.getElementById('editNameInput');
-        if (nameInput) nameInput.value = this.userName;
-        if (this.hasBlueTick || this.hasOrangeTick || this.hasBrownTick) {
-            if (modalTitle) modalTitle.innerHTML = 'تغییر نام (رایگان)';
-            if (coinMessage) coinMessage.style.display = 'none';
-        } else {
-            if (this.editCount === 0) {
-                if (modalTitle) modalTitle.innerHTML = 'تغییر نام (رایگان)';
-                if (coinMessage) coinMessage.style.display = 'none';
-            } else {
-                if (modalTitle) modalTitle.innerHTML = 'تغییر نام (۵ سکه)';
-                if (coinMessage) coinMessage.style.display = 'flex';
-            }
-        }
-        if (modal) modal.style.display = 'block';
-    },
-
-    closeEditModal() {
-        const modal = document.getElementById('editModal');
-        if (modal) modal.style.display = 'none';
-    },
-
-    saveUserName() {
-        const nameInput = document.getElementById('editNameInput');
-        if (!nameInput) return;
-        let newName = nameInput.value.trim();
-        if (!newName || newName.length < 2 || newName.length > 12) {
-            alert('نام باید بین ۲ تا ۱۲ حرف باشد');
-            return;
-        }
-        if (!this.hasBlueTick && !this.hasOrangeTick && !this.hasBrownTick) {
-            if (this.editCount > 0 && this.userCoins < 5) {
-                alert('سکه کافی ندارید');
-                return;
-            }
-            if (this.editCount > 0) this.userCoins -= 5;
-        }
-        this.userName = newName;
-        this.editCount++;
-        this.saveUserData();
-        this.updateMainProfile();
-        this.updateProfilePage();
-        this.updateCurrencyDisplay();
-        this.closeEditModal();
-        this.showNotification('✅ نام با موفقیت تغییر کرد');
-    },
-
-    logout() {
-        localStorage.removeItem('mafiaSun_userData');
-        localStorage.removeItem('mafiaSun_currentUser');
-        localStorage.removeItem('mafiaSun_loggedIn');
-        window.location.href = 'https://admin161723.github.io/Mafia_Sun_10.1000/';
-    }
-};
-
-window.addEventListener('DOMContentLoaded', function() {
-    App.loadUserData();
-});
-
-window.app = App;
-</script>
+        window.app = App;
+    </script>
 </body>
 </html>
