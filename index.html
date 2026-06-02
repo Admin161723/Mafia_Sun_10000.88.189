@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* ========== استایل‌های صفحه اصلی (کامل) ========== */
         * { margin:0; padding:0; box-sizing:border-box; }
         body { font-family:'Vazirmatn','Inter',sans-serif; overflow:hidden; background:#0a0c10; }
         #main-game-page { position:fixed; top:0; left:0; width:100%; height:100%; background:url('https://s8.uupload.ir/files/file_00000000ce4071fd96295e0893579ed1_9q9n.png') no-repeat center center fixed; background-size:cover; display:block; }
@@ -149,12 +148,10 @@
     </div>
 
     <script>
-        // ==================== JSONBin Sync ====================
         const JSONBIN_ID = '6984ae3a43b1c97be967c32b';
         const JSONBIN_KEY = '$2a$10$P2f/7ECPzq3HSI.6DSdcr.MaV748WQF7smMQL1bczP6YF4XKwjNvG';
         const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_ID}`;
         const SERVERS_PAGE_URL = 'https://admin161723.github.io/Server_MafiaSun10000.20/';
-        // لینک دقیق فروشگاه توی ریپازیتوری گیت‌هاب
         const STORE_PAGE_URL = 'https://admin161723.github.io/Foroshgahe_MafiaSun.ir/store.html';
 
         const AVATARS = {
@@ -189,49 +186,55 @@
             avatars: { ...AVATARS },
 
             async loadAllUsers() {
+                // اولویت با localStorage برای حفظ کاربر
+                const savedId = localStorage.getItem('mafiaSun_userId');
+                const localData = localStorage.getItem('mafiaSun_userData');
+                if (localData) {
+                    const parsed = JSON.parse(localData);
+                    Object.assign(this, parsed);
+                    this.userId = parsed.userId || savedId;
+                }
+                if (!this.userId && savedId) this.userId = savedId;
+                if (!this.userId) {
+                    this.userId = Date.now().toString();
+                    localStorage.setItem('mafiaSun_userId', this.userId);
+                }
+
+                // تلاش برای سینک با سرور
                 try {
                     const resp = await fetch(JSONBIN_URL, { headers: { 'X-Master-Key': JSONBIN_KEY } });
-                    if (!resp.ok) throw new Error();
-                    const data = await resp.json();
-                    const users = data.record?.users || {};
-                    // چک می‌کنیم آیا قبلاً توی localStorage کد کاربری ذخیره شده یا نه
-                    const uid = localStorage.getItem('mafiaSun_userId');
-                    if (uid && users[uid]) {
-                        const u = users[uid];
-                        this.userId = uid;
-                        this.userName = u.userName || 'بازیکن';
-                        this.userGems = u.gems || 100;
-                        this.userCoins = u.coins || 600;
-                        this.currentAvatar = u.currentAvatar || 'avatar1';
-                        this.editCount = u.editCount || 0;
-                        this.userStats = u.userStats || this.userStats;
-                        this.hasBlueTick = u.hasBlueTick || false;
-                        this.hasOrangeTick = u.hasOrangeTick || false;
-                        this.hasBrownTick = u.hasBrownTick || false;
-                        this.ownedAvatars = u.ownedAvatars || ['avatar1', 'avatar2'];
-                    } else {
-                        // کاربر جدید می‌سازیم و توی localStorage ذخیره می‌کنیم
-                        this.userId = Date.now().toString();
-                        localStorage.setItem('mafiaSun_userId', this.userId);
-                        await this.saveAllUsers();
+                    if (resp.ok) {
+                        const data = await resp.json();
+                        const users = data.record?.users || {};
+                        if (users[this.userId]) {
+                            const u = users[this.userId];
+                            this.userName = u.userName || this.userName;
+                            this.userGems = u.gems || this.userGems;
+                            this.userCoins = u.coins || this.userCoins;
+                            this.currentAvatar = u.currentAvatar || this.currentAvatar;
+                            this.editCount = u.editCount || 0;
+                            this.userStats = u.userStats || this.userStats;
+                            this.hasBlueTick = u.hasBlueTick || false;
+                            this.hasOrangeTick = u.hasOrangeTick || false;
+                            this.hasBrownTick = u.hasBrownTick || false;
+                            this.ownedAvatars = u.ownedAvatars || this.ownedAvatars;
+                        } else {
+                            // کاربر جدید در سرور هم ثبت شود
+                            await this.saveAllUsers();
+                        }
                     }
-                } catch(e) {
-                    console.warn('حالت آفلاین - استفاده از اطلاعات محلی');
-                    // اگر به سرور دسترسی نبود، از localStorage اطلاعات قبلی رو می‌گیریم
-                    const localData = localStorage.getItem('mafiaSun_userData');
-                    if (localData) {
-                        const parsed = JSON.parse(localData);
-                        Object.assign(this, parsed);
-                    }
-                }
+                } catch(e) { console.warn('حالت آفلاین - استفاده از اطلاعات محلی'); }
+
+                this.saveToLocal();
                 this.updateAllDisplays();
             },
 
-            async saveAllUsers() {
-                const userData = {
+            saveToLocal() {
+                const data = {
+                    userId: this.userId,
                     userName: this.userName,
-                    gems: this.userGems,
-                    coins: this.userCoins,
+                    userGems: this.userGems,
+                    userCoins: this.userCoins,
                     currentAvatar: this.currentAvatar,
                     editCount: this.editCount,
                     userStats: this.userStats,
@@ -240,13 +243,28 @@
                     hasBrownTick: this.hasBrownTick,
                     ownedAvatars: this.ownedAvatars
                 };
-                // همیشه یه نسخه محلی نگه می‌داریم
-                localStorage.setItem('mafiaSun_userData', JSON.stringify(userData));
+                localStorage.setItem('mafiaSun_userData', JSON.stringify(data));
+                localStorage.setItem('mafiaSun_userId', this.userId);
+            },
+
+            async saveAllUsers() {
+                this.saveToLocal();
                 try {
                     const resp = await fetch(JSONBIN_URL, { headers: { 'X-Master-Key': JSONBIN_KEY } });
                     const data = await resp.json();
                     const users = data.record?.users || {};
-                    users[this.userId] = userData;
+                    users[this.userId] = {
+                        userName: this.userName,
+                        gems: this.userGems,
+                        coins: this.userCoins,
+                        currentAvatar: this.currentAvatar,
+                        editCount: this.editCount,
+                        userStats: this.userStats,
+                        hasBlueTick: this.hasBlueTick,
+                        hasOrangeTick: this.hasOrangeTick,
+                        hasBrownTick: this.hasBrownTick,
+                        ownedAvatars: this.ownedAvatars
+                    };
                     await fetch(JSONBIN_URL, {
                         method: 'PUT',
                         headers: { 'X-Master-Key': JSONBIN_KEY, 'Content-Type': 'application/json' },
