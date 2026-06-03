@@ -7,285 +7,51 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --gold: #f0c040;
-            --red: #c0392b;
-            --green: #27ae60;
-            --card: rgba(18, 18, 35, 0.85);
-            --border: #2a2a40;
-            --bg-dark: #0a0c10;
-        }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-        }
-        body {
-            font-family: 'Vazirmatn', sans-serif;
-            background: var(--bg-dark);
-            color: #e0e0e0;
-            overflow: hidden;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .loading-page {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://cdn.imgurl.ir/uploads/i13489_file_00000000ce4071fd96295e0893579ed1.png') center/cover;
-            z-index: 3000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-        }
-        .loading-circle {
-            width: 60px;
-            height: 60px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top-color: var(--gold);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-        .loading-progress {
-            width: 200px;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 6px;
-            overflow: hidden;
-        }
-        .loading-progress div {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, var(--gold), #ffaa00);
-            border-radius: 6px;
-            transition: width 0.2s;
-        }
-        .version-text {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.8rem;
-        }
-        #appContainer {
-            flex: 1;
-            display: none;
-            overflow: hidden;
-            position: relative;
-        }
-        #gamePage {
-            display: none;
-            width: 100%;
-            height: 100%;
-            background: url('https://s8.uupload.ir/files/file_00000000ce4071fd96295e0893579ed1_9q9n.png') center/cover;
-            position: relative;
-            flex-direction: column;
-        }
-        .game-header {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            display: flex;
-            gap: 8px;
-            z-index: 10;
-        }
-        .resource-badge {
-            background: var(--card);
-            backdrop-filter: blur(8px);
-            padding: 6px 14px;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .profile-btn {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--card);
-            backdrop-filter: blur(8px);
-            padding: 5px 15px 5px 5px;
-            border-radius: 30px;
-            border: 1px solid var(--border);
-            cursor: pointer;
-            z-index: 10;
-        }
-        .profile-btn img {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            border: 2px solid var(--gold);
-        }
-        .game-buttons {
-            position: absolute;
-            bottom: 140px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 50px;
-        }
-        .game-btn {
-            width: 140px;
-            height: 140px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .game-btn:active {
-            transform: scale(0.95);
-        }
-        .game-btn img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.6));
-        }
-        .bottom-bar {
-            position: absolute;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 300px;
-            height: 60px;
-            background: rgba(20, 20, 35, 0.7);
-            backdrop-filter: blur(15px);
-            border-radius: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 30px;
-        }
-        .bar-item {
-            width: 42px;
-            height: 42px;
-            cursor: pointer;
-        }
-        .bar-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-        .overlay-page {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            padding: 20px;
-        }
-        .profile-card,
-        .avatar-card,
-        .edit-card {
-            background: #1a1a2e;
-            border-radius: 20px;
-            padding: 20px;
-            width: 90%;
-            max-width: 400px;
-            border: 1px solid var(--border);
-        }
-        .close-btn {
-            float: right;
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        .avatar-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 15px;
-        }
-        .avatar-item {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            border: 2px solid transparent;
-        }
-        .avatar-item.selected {
-            border-color: var(--gold);
-        }
-        .avatar-item img {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-        }
-        .stat-row {
-            display: flex;
-            gap: 10px;
-            margin: 10px 0;
-        }
-        .stat-cell {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 10px;
-            text-align: center;
-            font-size: 0.9rem;
-        }
-        .toast {
-            position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #222;
-            color: #fff;
-            padding: 10px 25px;
-            border-radius: 25px;
-            z-index: 5000;
-            border: 1px solid var(--gold);
-            font-size: 0.9rem;
-            animation: toastIn 0.3s ease;
-        }
-        @keyframes toastIn {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
-        }
-        .auth-btn {
-            width: 100%;
-            padding: 12px;
-            border-radius: 12px;
-            background: var(--gold);
-            color: #000;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 5px;
-        }
-        .copy-id {
-            cursor: pointer;
-            margin-right: 5px;
-            color: var(--gold);
-        }
+        :root { --gold: #f0c040; --red: #c0392b; --green: #27ae60; --card: rgba(18, 18, 35, 0.85); --border: #2a2a40; --bg-dark: #0a0c10; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+        body { font-family: 'Vazirmatn', sans-serif; background: var(--bg-dark); color: #e0e0e0; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+        .loading-page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://cdn.imgurl.ir/uploads/i13489_file_00000000ce4071fd96295e0893579ed1.png') center/cover; z-index: 3000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
+        .loading-circle { width: 60px; height: 60px; border: 3px solid rgba(255,255,255,0.3); border-top-color: var(--gold); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-progress { width: 200px; height: 6px; background: rgba(255,255,255,0.2); border-radius: 6px; overflow: hidden; }
+        .loading-progress div { width: 0%; height: 100%; background: linear-gradient(90deg, var(--gold), #ffaa00); border-radius: 6px; transition: width 0.2s; }
+        .version-text { color: rgba(255,255,255,0.7); font-size: 0.8rem; }
+        #appContainer { flex: 1; display: none; overflow: hidden; position: relative; }
+        #gamePage { display: none; width: 100%; height: 100%; background: url('https://s8.uupload.ir/files/file_00000000ce4071fd96295e0893579ed1_9q9n.png') center/cover; position: relative; flex-direction: column; }
+        .game-header { position: absolute; top: 15px; right: 15px; display: flex; gap: 8px; z-index: 10; }
+        .resource-badge { background: var(--card); backdrop-filter: blur(8px); padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border); font-size: 0.85rem; display: flex; align-items: center; gap: 5px; }
+        .profile-btn { position: absolute; top: 15px; left: 15px; display: flex; align-items: center; gap: 8px; background: var(--card); backdrop-filter: blur(8px); padding: 5px 15px 5px 5px; border-radius: 30px; border: 1px solid var(--border); cursor: pointer; z-index: 10; }
+        .profile-btn img { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--gold); }
+        .admin-gear { position: absolute; top: 15px; left: 150px; background: var(--card); backdrop-filter: blur(8px); width: 35px; height: 35px; border-radius: 50%; display: none; align-items: center; justify-content: center; cursor: pointer; border: 1px solid var(--border); z-index: 10; color: var(--gold); }
+        .game-buttons { position: absolute; bottom: 140px; left: 50%; transform: translateX(-50%); display: flex; gap: 50px; }
+        .game-btn { width: 140px; height: 140px; cursor: pointer; transition: 0.2s; }
+        .game-btn:active { transform: scale(0.95); }
+        .game-btn img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6)); }
+        .bottom-bar { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); width: 300px; height: 60px; background: rgba(20, 20, 35, 0.7); backdrop-filter: blur(15px); border-radius: 40px; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; gap: 30px; }
+        .bar-item { width: 42px; height: 42px; cursor: pointer; }
+        .bar-item img { width: 100%; height: 100%; object-fit: contain; }
+        .overlay-page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
+        .modal-box { background: #1a1a2e; border-radius: 20px; padding: 20px; width: 90%; max-width: 400px; border: 1px solid var(--border); position: relative; }
+        .close-btn { position: absolute; top: 10px; left: 10px; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
+        .avatar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+        .avatar-item { background: rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; text-align: center; cursor: pointer; border: 2px solid transparent; }
+        .avatar-item.selected { border-color: var(--gold); }
+        .avatar-item img { width: 60px; height: 60px; border-radius: 50%; }
+        .avatar-item .price { font-size: 0.7rem; color: var(--gold); margin-top: 4px; }
+        .stat-row { display: flex; gap: 10px; margin: 10px 0; }
+        .stat-cell { flex: 1; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 10px; text-align: center; font-size: 0.9rem; }
+        .admin-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 4000; padding: 20px; overflow-y: auto; }
+        .admin-content { background: #1e1e30; border-radius: 20px; padding: 20px; border: 1px solid var(--border); }
+        .admin-content table { width: 100%; border-collapse: collapse; color: #fff; font-size: 0.8rem; }
+        .admin-content th, .admin-content td { padding: 10px 5px; border-bottom: 1px solid #333; text-align: center; }
+        .btn-small { padding: 5px 10px; border-radius: 8px; border: none; background: var(--gold); color: #000; font-weight: bold; cursor: pointer; font-size: 0.7rem; margin: 2px; }
+        .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #222; color: #fff; padding: 10px 25px; border-radius: 25px; z-index: 5000; border: 1px solid var(--gold); font-size: 0.9rem; animation: toastIn 0.3s ease; }
+        @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+        .auth-btn { width: 100%; padding: 12px; border-radius: 12px; background: var(--gold); color: #000; border: none; font-weight: bold; cursor: pointer; margin-top: 5px; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 15px; }
+        .tab { padding: 8px 20px; border-radius: 20px; background: rgba(255,255,255,0.1); color: #aaa; cursor: pointer; font-size: 0.9rem; }
+        .tab.active { background: var(--gold); color: #000; }
+        .copy-id { cursor: pointer; margin-right: 5px; color: var(--gold); }
     </style>
 </head>
 <body>
@@ -297,50 +63,29 @@
 
     <div id="appContainer">
         <div id="gamePage">
-            <div class="game-header">
-                <div class="resource-badge">💎 <span id="gemVal">0</span></div>
-                <div class="resource-badge">🪙 <span id="coinVal">0</span></div>
-            </div>
-            <div class="profile-btn" id="openProfileBtn">
-                <img id="mainAvatarImg" src="" alt="avatar">
-                <span id="mainNameText">بازیکن</span>
-            </div>
-            <div class="game-buttons">
-                <div class="game-btn" id="competitiveBtn"><img src="https://s8.uupload.ir/files/inshot_20260224_020256460_81p3.png" alt="رقابتی"></div>
-                <div class="game-btn" id="serversBtn"><img src="https://s8.uupload.ir/files/inshot_20260224_020314922_6mks.png" alt="سرورها"></div>
-            </div>
-            <div class="bottom-bar">
-                <div class="bar-item" id="cupBtn"><img src="https://s8.uupload.ir/files/inshot_20260221_223221592_qet.png" alt="کاپ"></div>
-                <div class="bar-item" id="clanBtn"><img src="https://s8.uupload.ir/files/inshot_20260221_223016526_swue.png" alt="کلن"></div>
-                <div class="bar-item" id="shopBtn"><img src="https://s8.uupload.ir/files/inshot_20260221_223333561_n7g4.png" alt="فروشگاه"></div>
-            </div>
+            <div class="game-header"><div class="resource-badge">💎 <span id="gemVal">0</span></div><div class="resource-badge">🪙 <span id="coinVal">0</span></div></div>
+            <div class="profile-btn" id="openProfileBtn"><img id="mainAvatarImg" src="" alt="avatar"><span id="mainNameText">بازیکن</span></div>
+            <div class="admin-gear" id="openAdminPanelBtn">⚙️</div>
+            <div class="game-buttons"><div class="game-btn" id="competitiveBtn"><img src="https://s8.uupload.ir/files/inshot_20260224_020256460_81p3.png" alt="رقابتی"></div><div class="game-btn" id="serversBtn"><img src="https://s8.uupload.ir/files/inshot_20260224_020314922_6mks.png" alt="سرورها"></div></div>
+            <div class="bottom-bar"><div class="bar-item" id="cupBtn"><img src="https://s8.uupload.ir/files/inshot_20260221_223221592_qet.png" alt="کاپ"></div><div class="bar-item" id="clanBtn"><img src="https://s8.uupload.ir/files/inshot_20260221_223016526_swue.png" alt="کلن"></div><div class="bar-item" id="shopBtn"><img src="https://s8.uupload.ir/files/inshot_20260221_223333561_n7g4.png" alt="فروشگاه"></div></div>
         </div>
     </div>
 
     <div id="profileOverlay" class="overlay-page">
-        <div class="profile-card">
+        <div class="modal-box">
             <button class="close-btn" id="closeProfileBtn">&times;</button>
             <img id="profileAvatarImg" style="width:80px;height:80px;border-radius:50%;margin:0 auto;display:block;border:2px solid var(--gold);" alt="avatar">
             <h3 id="profileNameText" style="text-align:center;margin:10px 0;"></h3>
-            <div class="stat-row">
-                <div class="stat-cell">🏆 برد: <span id="winStat">0</span></div>
-                <div class="stat-cell">📊 باخت: <span id="loseStat">0</span></div>
-            </div>
-            <div class="stat-row">
-                <div class="stat-cell">⏳ ساعت: <span id="hourStat">0</span></div>
-                <div class="stat-cell">👁️ ناظر: <span id="obsStat">0</span></div>
-            </div>
-            <p style="font-size:0.8rem;color:#aaa;text-align:center;">
-                🆔 کد کاربری: <span id="userIdSpan"></span>
-                <i class="fas fa-copy copy-id" id="copyUserIdBtn" title="کپی کد کاربری"></i>
-            </p>
+            <div class="stat-row"><div class="stat-cell">🏆 برد: <span id="winStat">0</span></div><div class="stat-cell">📊 باخت: <span id="loseStat">0</span></div></div>
+            <div class="stat-row"><div class="stat-cell">⏳ ساعت: <span id="hourStat">0</span></div><div class="stat-cell">👁️ ناظر: <span id="obsStat">0</span></div></div>
+            <p style="font-size:0.8rem;color:#aaa;text-align:center;">🆔 کد کاربری: <span id="userIdSpan"></span> <i class="fas fa-copy copy-id" id="copyUserIdBtn" title="کپی کد کاربری"></i></p>
             <button class="auth-btn" id="editNameBtn">ویرایش نام</button>
             <button class="auth-btn" id="openAvatarEditorBtn">تغییر آواتار</button>
         </div>
     </div>
 
     <div id="editNameOverlay" class="overlay-page">
-        <div class="edit-card">
+        <div class="modal-box">
             <button class="close-btn" id="closeEditBtn">&times;</button>
             <h3>تغییر نام</h3>
             <p id="editCostMsg" style="color:var(--gold);font-size:0.8rem;"></p>
@@ -350,10 +95,43 @@
     </div>
 
     <div id="avatarOverlay" class="overlay-page">
-        <div class="avatar-card">
+        <div class="modal-box">
             <button class="close-btn" id="closeAvatarBtn">&times;</button>
             <h3>انتخاب آواتار</h3>
-            <div class="avatar-grid" id="avatarGridContainer"></div>
+            <div class="tabs">
+                <div class="tab active" data-tab="my">آواتارهای من</div>
+                <div class="tab" data-tab="shop">فروشگاه</div>
+            </div>
+            <div id="myAvatarsPanel" class="avatar-grid"></div>
+            <div id="shopAvatarsPanel" class="avatar-grid" style="display:none;"></div>
+        </div>
+    </div>
+
+    <div id="adminOverlay" class="admin-modal">
+        <div class="admin-content">
+            <button class="close-btn" id="closeAdminBtn" style="position:absolute; top:10px; left:10px;">&times;</button>
+            <h2 style="color:var(--gold);">پنل مدیریت</h2>
+            <div style="display:flex; gap:10px; margin:10px 0;">
+                <input type="text" id="adminSearchInput" placeholder="جستجوی کاربر..." style="flex:1; padding:12px; border-radius:12px; background:#111; border:1px solid #444; color:#fff;">
+                <button class="btn-small" id="refreshAdminTable">🔄</button>
+                <button class="btn-small" id="addUserAdminBtn">➕ کاربر</button>
+            </div>
+            <div style="overflow-x:auto;"><table id="adminUsersTable"><thead><tr><th>UID</th><th>نام</th><th>نقش</th><th>جم</th><th>سکه</th><th>عملیات</th></tr></thead><tbody></tbody></table></div>
+        </div>
+    </div>
+
+    <div id="userFormOverlay" class="admin-modal">
+        <div class="modal-box" style="max-width:450px;">
+            <button class="close-btn" id="closeUserFormBtn">&times;</button>
+            <h3 id="formTitle">ویرایش کاربر</h3>
+            <input id="fPhone" placeholder="شماره" style="width:100%;padding:10px;border-radius:8px;background:#111;border:1px solid #444;color:#fff;margin:6px 0;">
+            <input id="fName" placeholder="نام" style="width:100%;padding:10px;border-radius:8px;background:#111;border:1px solid #444;color:#fff;margin:6px 0;">
+            <input id="fPass" placeholder="رمز" style="width:100%;padding:10px;border-radius:8px;background:#111;border:1px solid #444;color:#fff;margin:6px 0;">
+            <select id="fRole" style="width:100%;padding:10px;border-radius:8px;background:#111;border:1px solid #444;color:#fff;margin:6px 0;"><option value="normal">عادی</option><option value="admin">ادمین</option><option value="observer">ناظر</option><option value="support">پشتیبانی</option><option value="creator">سازنده</option></select>
+            <select id="fTick" style="width:100%;padding:10px;border-radius:8px;background:#111;border:1px solid #444;color:#fff;margin:6px 0;"><option value="">بدون تیک</option><option value="blue">آبی</option><option value="orange">نارنجی</option><option value="brown">قهوه‌ای</option></select>
+            <input id="fGems" placeholder="جم" type="number" style="width:100%;padding:10px;border-radius:8px;background:#111;border:1px solid #444;color:#fff;margin:6px 0;">
+            <input id="fCoins" placeholder="سکه" type="number" style="width:100%;padding:10px;border-radius:8px;background:#111;border:1px solid #444;color:#fff;margin:6px 0;">
+            <button class="auth-btn" id="saveUserFormBtn">ذخیره</button>
         </div>
     </div>
 
@@ -364,14 +142,13 @@
             const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
             const AVATARS = {
-                'avatar1': 'https://s8.uupload.ir/files/inshot_20260208_214035107_wkwk.png',
-                'avatar2': 'https://cdn.imgurl.ir/uploads/e36869_InShot_20260225_191621541.png',
-                'ninja': 'https://s8.uupload.ir/files/inshot_20260212_151231364_umrq.png',
-                'samurai': 'https://s8.uupload.ir/files/inshot_20260212_151120584_7df6.png',
-                'avatar17': 'https://s8.uupload.ir/files/inshot_20260224_194133998_3dcu.png',
-                'avatar18': 'https://s8.uupload.ir/files/inshot_20260225_191621541_nutk.png'
+                'avatar1': { url: 'https://s8.uupload.ir/files/inshot_20260208_214035107_wkwk.png', price: 0 },
+                'avatar2': { url: 'https://cdn.imgurl.ir/uploads/e36869_InShot_20260225_191621541.png', price: 0 },
+                'ninja': { url: 'https://s8.uupload.ir/files/inshot_20260212_151231364_umrq.png', price: 80 },
+                'samurai': { url: 'https://s8.uupload.ir/files/inshot_20260212_151120584_7df6.png', price: 100 },
+                'avatar17': { url: 'https://s8.uupload.ir/files/inshot_20260224_194133998_3dcu.png', price: 120 },
+                'avatar18': { url: 'https://s8.uupload.ir/files/inshot_20260225_191621541_nutk.png', price: 90 }
             };
-
             const SPECIALS = [
                 { phone:'09904844031', pass:'Admin16172-matin-1000', name:'ᴀᴍᴏᴍɪᴛɪ', role:'creator', tick:'blue' },
                 { phone:'09940940720', pass:'Erfan.sh85', name:'♛✯ Èr£åñ_ʂɧ ✯♛', role:'support', tick:'blue' },
@@ -385,12 +162,10 @@
             let db = { users: {}, bans: [] };
             let currentUser = null;
             let currentSession = null;
+            let targetPhone = null;
             const LOCAL_KEY = 'mafia_sun_session';
 
-            // تولید UID ساده برای نمایش
-            function generateUID() {
-                return Date.now().toString(36) + Math.random().toString(36).substr(2, 4);
-            }
+            function generateUID() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 4); }
 
             async function loadDB() {
                 try {
@@ -408,11 +183,7 @@
 
             async function saveDB() {
                 try {
-                    await fetch(BIN_URL, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
-                        body: JSON.stringify(db)
-                    });
+                    await fetch(BIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY }, body: JSON.stringify(db) });
                     localStorage.setItem('mafia_db_backup', JSON.stringify(db));
                 } catch(e) { console.warn('ذخیره روی سرور ناموفق'); }
             }
@@ -421,14 +192,7 @@
                 let updated = false;
                 for(const s of SPECIALS) {
                     if(!db.users[s.phone]) {
-                        const uid = generateUID();
-                        db.users[s.phone] = {
-                            phone: s.phone, password: s.pass, name: s.name, uid,
-                            age: 25, role: s.role, tick: s.tick,
-                            gems: Infinity, coins: Infinity,
-                            avatar: 'avatar1', ownedAvatars: Object.keys(AVATARS),
-                            editCount: 0, stats: { wins:0, losses:0, hours:0, obs:0 }
-                        };
+                        db.users[s.phone] = { phone: s.phone, password: s.pass, name: s.name, uid: generateUID(), age: 25, role: s.role, tick: s.tick, gems: Infinity, coins: Infinity, avatar: 'avatar1', ownedAvatars: Object.keys(AVATARS), editCount: 0, stats: { wins:0, losses:0, hours:0, obs:0 } };
                         updated = true;
                     }
                 }
@@ -460,38 +224,27 @@
                 if(!currentUser) return;
                 document.getElementById('gemVal').innerText = currentUser.gems === Infinity ? '∞' : currentUser.gems;
                 document.getElementById('coinVal').innerText = currentUser.coins === Infinity ? '∞' : currentUser.coins;
-                document.getElementById('mainAvatarImg').src = AVATARS[currentUser.avatar] || Object.values(AVATARS)[0];
+                document.getElementById('mainAvatarImg').src = AVATARS[currentUser.avatar]?.url || AVATARS.avatar1.url;
                 document.getElementById('mainNameText').innerText = currentUser.name;
+                document.getElementById('openAdminPanelBtn').style.display = (currentUser.role === 'creator' || currentUser.role === 'support') ? 'flex' : 'none';
             }
 
             function toast(msg, type='info') {
-                const old = document.querySelector('.toast');
-                if(old) old.remove();
-                const t = document.createElement('div');
-                t.className = 'toast';
-                t.textContent = msg;
-                if(type === 'error') t.style.borderColor = '#e74c3c';
-                document.body.appendChild(t);
-                setTimeout(() => t.remove(), 2500);
+                const old = document.querySelector('.toast'); if(old) old.remove();
+                const t = document.createElement('div'); t.className='toast'; t.textContent=msg;
+                if(type==='error') t.style.borderColor='#e74c3c';
+                document.body.appendChild(t); setTimeout(()=>t.remove(), 2500);
             }
 
-            // ========== دکمه فروشگاه با لینک دقیق ==========
-            document.getElementById('shopBtn').onclick = () => {
-                window.location.href = 'https://admin161723.github.io/Foroshgahe_MafiaSun.ir/store.html';
-            };
-
-            document.getElementById('serversBtn').onclick = () => {
-                window.location.href = 'https://admin161723.github.io/Server_MafiaSun10000.20/';
-            };
-
-            ['competitiveBtn', 'cupBtn', 'clanBtn'].forEach(id => {
-                document.getElementById(id).onclick = () => toast('به زودی');
-            });
+            // دکمه فروشگاه
+            document.getElementById('shopBtn').onclick = () => window.location.href = 'https://admin161723.github.io/Foroshgahe_MafiaSun.ir/';
+            document.getElementById('serversBtn').onclick = () => window.location.href = 'https://admin161723.github.io/Server_MafiaSun10000.20/';
+            ['competitiveBtn','cupBtn','clanBtn'].forEach(id => document.getElementById(id).onclick = () => toast('به زودی'));
 
             // پروفایل
             document.getElementById('openProfileBtn').onclick = () => {
                 if(!currentUser) return toast('وارد نشده‌اید');
-                document.getElementById('profileAvatarImg').src = AVATARS[currentUser.avatar] || Object.values(AVATARS)[0];
+                document.getElementById('profileAvatarImg').src = AVATARS[currentUser.avatar]?.url || AVATARS.avatar1.url;
                 document.getElementById('profileNameText').innerText = currentUser.name;
                 document.getElementById('userIdSpan').innerText = currentUser.uid || currentUser.phone;
                 document.getElementById('winStat').innerText = currentUser.stats?.wins || 0;
@@ -502,66 +255,123 @@
             };
             document.getElementById('closeProfileBtn').onclick = () => document.getElementById('profileOverlay').style.display = 'none';
             document.getElementById('copyUserIdBtn').onclick = () => {
-                const uid = document.getElementById('userIdSpan').innerText;
-                navigator.clipboard.writeText(uid).then(() => toast('کد کاربری کپی شد'));
+                navigator.clipboard.writeText(document.getElementById('userIdSpan').innerText).then(() => toast('کد کپی شد'));
             };
 
             // ویرایش نام
             document.getElementById('editNameBtn').onclick = () => {
                 document.getElementById('editNameOverlay').style.display = 'flex';
-                const cost = (!currentUser.tick && currentUser.editCount > 0) ? '۵ سکه' : 'رایگان';
-                document.getElementById('editCostMsg').innerText = `هزینه: ${cost}`;
+                document.getElementById('editCostMsg').innerText = (!currentUser.tick && currentUser.editCount > 0) ? 'هزینه: ۵ سکه' : 'هزینه: رایگان';
                 document.getElementById('newNameInput').value = currentUser.name;
             };
             document.getElementById('closeEditBtn').onclick = () => document.getElementById('editNameOverlay').style.display = 'none';
             document.getElementById('saveNameBtn').onclick = async () => {
-                const newName = document.getElementById('newNameInput').value.trim();
-                if(newName.length < 2) return toast('نام نامعتبر', 'error');
+                const n = document.getElementById('newNameInput').value.trim();
+                if(n.length < 2) return toast('نام نامعتبر', 'error');
                 if(!currentUser.tick && currentUser.editCount > 0 && currentUser.coins < 5) return toast('سکه کافی نیست', 'error');
                 if(!currentUser.tick && currentUser.editCount > 0) currentUser.coins -= 5;
-                currentUser.name = newName;
-                currentUser.editCount = (currentUser.editCount || 0) + 1;
-                await saveDB();
-                updateUI();
+                currentUser.name = n;
+                currentUser.editCount = (currentUser.editCount||0)+1;
+                await saveDB(); updateUI();
                 document.getElementById('editNameOverlay').style.display = 'none';
                 toast('نام تغییر کرد', 'success');
             };
 
-            // آواتار
-            document.getElementById('openAvatarEditorBtn').onclick = () => {
-                const grid = document.getElementById('avatarGridContainer');
-                grid.innerHTML = '';
-                for(const [key, url] of Object.entries(AVATARS)) {
+            // مدیریت آواتار
+            function renderAvatars() {
+                const my = document.getElementById('myAvatarsPanel'), shop = document.getElementById('shopAvatarsPanel');
+                my.innerHTML = ''; shop.innerHTML = '';
+                for(const [key, av] of Object.entries(AVATARS)) {
                     const card = document.createElement('div');
                     card.className = 'avatar-item' + (currentUser.avatar === key ? ' selected' : '');
-                    card.innerHTML = `<img src="${url}" alt="${key}"><span>${key}</span>`;
-                    card.onclick = async () => {
-                        currentUser.avatar = key;
-                        await saveDB();
-                        updateUI();
-                        document.getElementById('avatarOverlay').style.display = 'none';
-                        toast('آواتار تغییر کرد', 'success');
-                    };
-                    grid.appendChild(card);
+                    card.innerHTML = `<img src="${av.url}" alt="${key}">`;
+                    if(av.price > 0 && !currentUser.ownedAvatars.includes(key)) {
+                        card.innerHTML += `<div class="price">${av.price} جم</div>`;
+                        card.onclick = async () => { if(currentUser.gems < av.price) return toast('جم کافی نیست', 'error'); currentUser.gems -= av.price; currentUser.ownedAvatars.push(key); currentUser.avatar = key; await saveDB(); updateUI(); renderAvatars(); toast('آواتار خریداری شد', 'success'); };
+                        shop.appendChild(card);
+                    } else {
+                        card.onclick = async () => { currentUser.avatar = key; await saveDB(); updateUI(); renderAvatars(); toast('آواتار تغییر کرد', 'success'); };
+                        if(currentUser.ownedAvatars.includes(key)) my.appendChild(card); else shop.appendChild(card);
+                    }
                 }
+            }
+            document.getElementById('openAvatarEditorBtn').onclick = () => {
+                renderAvatars();
                 document.getElementById('avatarOverlay').style.display = 'flex';
+                document.querySelectorAll('#avatarOverlay .tab').forEach(t => t.classList.remove('active'));
+                document.querySelector('#avatarOverlay .tab[data-tab="my"]').classList.add('active');
+                document.getElementById('myAvatarsPanel').style.display = 'grid';
+                document.getElementById('shopAvatarsPanel').style.display = 'none';
             };
             document.getElementById('closeAvatarBtn').onclick = () => document.getElementById('avatarOverlay').style.display = 'none';
+            document.querySelectorAll('#avatarOverlay .tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('#avatarOverlay .tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    document.getElementById('myAvatarsPanel').style.display = this.dataset.tab === 'my' ? 'grid' : 'none';
+                    document.getElementById('shopAvatarsPanel').style.display = this.dataset.tab === 'shop' ? 'grid' : 'none';
+                });
+            });
+
+            // پنل مدیریت
+            document.getElementById('openAdminPanelBtn').onclick = () => { renderAdminTable(); document.getElementById('adminOverlay').style.display = 'flex'; };
+            document.getElementById('closeAdminBtn').onclick = () => document.getElementById('adminOverlay').style.display = 'none';
+            function renderAdminTable(f='') {
+                const tbody = document.getElementById('adminUsersTable').querySelector('tbody');
+                tbody.innerHTML = '';
+                Object.values(db.users).filter(u => u.phone.includes(f) || u.name.includes(f) || (u.uid||'').includes(f)).forEach(u => {
+                    const row = tbody.insertRow();
+                    row.innerHTML = `<td>${u.uid||u.phone}</td><td>${u.tick?'🔵':''}${u.name}</td><td>${u.role}</td><td>${u.gems===Infinity?'∞':u.gems}</td><td>${u.coins===Infinity?'∞':u.coins}</td><td><button class="btn-small editUserBtn" data-phone="${u.phone}">✏️</button></td>`;
+                });
+                document.querySelectorAll('.editUserBtn').forEach(b => b.onclick = () => openUserForm(b.dataset.phone));
+            }
+            document.getElementById('adminSearchInput').oninput = e => renderAdminTable(e.target.value);
+            document.getElementById('refreshAdminTable').onclick = () => { loadDB().then(() => renderAdminTable(document.getElementById('adminSearchInput').value)); };
+            document.getElementById('addUserAdminBtn').onclick = () => openUserForm(null);
+            function openUserForm(phone) {
+                document.getElementById('userFormOverlay').style.display = 'flex';
+                document.getElementById('formTitle').innerText = phone ? 'ویرایش کاربر' : 'افزودن کاربر';
+                const u = phone ? db.users[phone] : null;
+                document.getElementById('fPhone').value = u?.phone || '';
+                document.getElementById('fName').value = u?.name || '';
+                document.getElementById('fPass').value = u?.password || '';
+                document.getElementById('fRole').value = u?.role || 'normal';
+                document.getElementById('fTick').value = u?.tick || '';
+                document.getElementById('fGems').value = u?.gems === Infinity ? 99999 : (u?.gems || 100);
+                document.getElementById('fCoins').value = u?.coins === Infinity ? 99999 : (u?.coins || 600);
+                targetPhone = phone;
+            }
+            document.getElementById('closeUserFormBtn').onclick = () => document.getElementById('userFormOverlay').style.display = 'none';
+            document.getElementById('saveUserFormBtn').onclick = async () => {
+                const phone = document.getElementById('fPhone').value.trim();
+                if(!phone) return toast('شماره الزامی است');
+                const data = { phone, name: document.getElementById('fName').value.trim(), password: document.getElementById('fPass').value.trim(), role: document.getElementById('fRole').value, tick: document.getElementById('fTick').value || null, gems: parseInt(document.getElementById('fGems').value)||100, coins: parseInt(document.getElementById('fCoins').value)||600 };
+                if(targetPhone) {
+                    if(targetPhone !== phone) delete db.users[targetPhone];
+                    db.users[phone] = { ...db.users[targetPhone], ...data };
+                } else {
+                    db.users[phone] = { ...data, uid: generateUID(), age:18, avatar:'avatar1', ownedAvatars:['avatar1','avatar2'], editCount:0, stats:{wins:0,losses:0,hours:0,obs:0} };
+                }
+                await saveDB();
+                document.getElementById('userFormOverlay').style.display = 'none';
+                renderAdminTable(document.getElementById('adminSearchInput').value);
+                toast('کاربر ذخیره شد', 'success');
+            };
 
             // لودینگ
-            let loadProgress = 0;
-            const loadInterval = setInterval(() => {
-                loadProgress += Math.random() * 15;
-                if(loadProgress >= 100) {
-                    loadProgress = 100;
-                    clearInterval(loadInterval);
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if(progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
                     document.getElementById('loadBar').style.width = '100%';
                     setTimeout(async () => {
                         await loadDB();
                         document.getElementById('loadingPage').style.display = 'none';
                         document.getElementById('appContainer').style.display = 'block';
                     }, 500);
-                } else document.getElementById('loadBar').style.width = loadProgress + '%';
+                } else document.getElementById('loadBar').style.width = progress + '%';
             }, 200);
         })();
     </script>
